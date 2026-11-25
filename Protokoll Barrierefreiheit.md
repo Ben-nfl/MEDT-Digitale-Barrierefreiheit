@@ -221,11 +221,11 @@ Die Vermutungen von oben haben sich bestätigt. Auf dieser Seite gibt es sogar *
 
 **Was noch zu tun ist (Plan für das Formular):**
 
-- [ ] Jedes `<label>` mit `for="..."` und das Feld mit der passenden `id="..."` verbinden
-- [ ] Die Checkbox mit dem Text in ein `<label>` packen
-- [ ] Pflichtfelder kennzeichnen (z. B. „*“ und `required`)
-- [ ] Fehlermeldung mit `role="alert"` versehen, damit der Screenreader sie vorliest
-- [ ] `autocomplete="name"` und `autocomplete="email"` ergänzen
+- [x] Jedes `<label>` mit `for="..."` und das Feld mit der passenden `id="..."` verbinden → Schritt 4
+- [x] Die Checkbox mit dem Text in ein `<label>` packen → Schritt 4
+- [x] Pflichtfelder kennzeichnen (z. B. „*“ und `required`) → Schritt 4
+- [x] Fehlermeldung mit `role="alert"` versehen, damit der Screenreader sie vorliest → Schritt 4
+- [x] `autocomplete="name"` und `autocomplete="email"` ergänzen → Schritt 4
 - [x] Kontrast vom orangen Knopf verbessern (dunkleres Orange oder dunkle Schrift) → Schritt 2
 - [ ] „Kontakt“ als `<h1>` auszeichnen
 
@@ -379,7 +379,88 @@ Außerdem waren **alle** Schriftgrößen in festen Pixeln (`px`) angegeben. Wenn
 
 ---
 
-### Schritt 4: …
+### Schritt 4: Formular-Beschriftungen, Pflichtfelder und Fehlermeldungen
+
+**Datum:** 25.11.2026
+**Hinweis:** Dieser Schritt wurde mit KI-Unterstützung (Claude Code) umgesetzt.
+
+**Was war das Problem?**
+WAVE hat auf der Kontakt-Seite **4 Fehler „Missing form label“** gefunden, dazu 4 Warnungen „Orphaned form label“ und 1 Warnung „Select missing label“ (siehe Schritt 1).
+Die Beschriftungen (`<label>`) standen zwar über den Feldern, waren aber **nicht mit ihnen verbunden**. Ein Screenreader sagt dann nur „Eingabefeld“ und nicht, was man eintippen soll. Beim Prüfen hat sich gezeigt: **Watchlist, Alarme und Login** haben genau dasselbe Problem.
+Dazu kamen:
+- Man sah vorher nicht, welche Felder Pflicht sind.
+- Die Fehlermeldungen wurden vom Screenreader nicht vorgelesen.
+- Bei der Datenschutz-Checkbox konnte man nicht auf den Text klicken.
+- Name, E-Mail, Benutzername und Passwort hatten kein `autocomplete`. Der Browser konnte sie also nicht automatisch ausfüllen.
+
+**Betroffene WCAG-Kriterien:** 1.3.1 Info und Beziehungen, 1.3.5 Bestimmung des Eingabezwecks, 3.3.1 Fehlererkennung, 3.3.2 Beschriftungen oder Anweisungen, 4.1.2 Name, Rolle, Wert, 4.1.3 Statusmeldungen
+
+**Was habe ich im Code geändert?**
+
+1. **Beschriftung mit Feld verbunden:** Jedes Feld hat eine eindeutige `id`, und das `<label>` zeigt mit `for` darauf.
+   Vorher: `<label class="feld-beschriftung">Name</label>` + `<input class="feld-input" ...>`
+   Nachher: `<label class="feld-beschriftung" for="kontakt-name">Name *</label>` + `<input class="feld-input" id="kontakt-name" ...>`
+   Jetzt liest der Screenreader „Name, Pflichtfeld, Eingabefeld“ vor. Außerdem kommt man mit einem Klick auf die Beschriftung ins Feld.
+2. **Checkbox:** Der Text „Ich bin mit der Verarbeitung meiner Daten einverstanden.“ war ein `<span>`. Jetzt ist er ein `<label for="kontakt-datenschutz">`, und man kann auch auf den Text klicken.
+3. **Pflichtfelder:** Pflichtfelder haben das Attribut `required`, das der Screenreader als „Pflichtfeld“ ansagt. Sichtbar sind sie mit einem orangen `*` markiert. Über jedem Formular steht „Felder mit * sind Pflichtfelder.“ Das `*` hat `aria-hidden="true"`, damit der Screenreader nicht „Stern“ vorliest.
+4. **Fehlermeldungen:** Die roten Fehlermeldungen haben `role="alert"`. Der Screenreader liest sie sofort vor, wenn sie erscheinen.
+5. **Autovervollständigung:** `autocomplete="name"`, `"email"`, `"username"` und `"current-password"` ergänzt. Beim Suchfeld in der Watchlist steht `autocomplete="off"`, damit die Vorschläge des Browsers nicht die eigene Coin-Liste verdecken.
+
+**Geänderte Dateien:**
+
+| Datei | Änderung |
+|-------|----------|
+| `.../components/contact/contact.component.ts` | 5 Felder mit `for`/`id`, Checkbox-Label, `required`, `autocomplete`, `role="alert"`, Pflichtfeld-Hinweis |
+| `.../components/watchlist/watchlist.component.ts` | 3 Felder mit `for`/`id`, `required`, `role="alert"`, Pflichtfeld-Hinweis |
+| `.../components/alerts/alerts.component.ts` | 3 Felder mit `for`/`id`, `required`, `role="alert"`, Pflichtfeld-Hinweis |
+| `.../components/login/login.component.ts` | 2 Felder mit `for`/`id`, `autocomplete`, `role="alert"` |
+| `frontend-angular/src/styles.css` | neue Klassen `.pflicht` (oranges Sternchen, 7,4 : 1) und `.pflicht-hinweis` |
+
+**Überprüfung:** Per Skript habe ich für jedes Feld geprüft, ob der Browser die Beschriftung zuordnet. Alle 13 Felder (Kontakt 5, Watchlist 3, Alarme 3, Login 2) haben jetzt ein Label. Die Fehlermeldung im Kontaktformular erscheint mit `role="alert"`.
+
+**Commit:**
+
+**Vorher / Nachher im Browser:**
+
+![Kontakt vorher](<Bilder/Schritt4 Formulare vorher - contact.png>)
+
+*Bild 15: Kontakt-Seite vorher. Man sieht nicht, welche Felder Pflicht sind.*
+
+![Kontakt nachher mit Fehlermeldung](<Bilder/Schritt4 Formulare nachher - contact Fehlermeldung.png>)
+
+*Bild 16: Kontakt-Seite nachher, nach einem Klick auf „Nachricht senden“ mit leerem Formular. Pflichtfelder sind mit * markiert, die Fehlermeldung wird vom Screenreader vorgelesen.*
+
+![Alarme nachher](<Bilder/Schritt4 Formulare nachher - alerts.png>)
+
+*Bild 17: Alarme nachher. Auch hier sind die Pflichtfelder markiert und die Beschriftungen verbunden.*
+
+**Noch gefunden (für später):** Die Vorschlagsliste der Coin-Suche in der Watchlist besteht aus `<div>`-Elementen mit Klick. Mit der Tastatur kann man sie nicht auswählen (WCAG 2.1.1 Tastatur). Das gehört zum Schritt „Tastatur-Bedienung“.
+
+**Ergebnis in WAVE danach:**
+
+![WAVE auf der Kontakt-Seite nach Schritt 4](<Bilder/Bildschirmfoto 2026-11-25 um 21.36.07.png>)
+
+*Bild 18: WAVE auf der Kontakt-Seite nach Schritt 4. Keine Fehler mehr, AIM Score 10 von 10. Die grünen Symbole zeigen die 5 richtig verbundenen Beschriftungen („Form label“).*
+
+| Was WAVE zählt | Kontakt vor Schritt 4 | Kontakt nach Schritt 4 |
+|----------------|----------------------:|-----------------------:|
+| Fehler | 4 | **0** |
+| Kontrast-Fehler | 0 | 0 |
+| Warnungen | 7 | **2** |
+| Features | 1 | **6** |
+| ARIA | 0 | 5 |
+| AIM Score | 7,4 (74 %) | **10 (100 %)** |
+
+**Was das bedeutet:**
+
+- Die **4 Fehler „Missing form label“** sind behoben. WAVE zeigt stattdessen **5 × „Form label“** als positives Merkmal (Features).
+- Die Warnungen **„Orphaned form label“ (4×)** und **„Select missing label“ (1×)** sind weg.
+- Die **5 × „ARIA hidden“** sind die orangen Sternchen mit `aria-hidden="true"`. Das ist Absicht: Der Screenreader soll nicht „Stern“ vorlesen, weil das Feld schon durch `required` als Pflichtfeld angesagt wird. WAVE zeigt das nur zur Kontrolle an, es ist kein Fehler.
+- Übrig sind die gleichen 2 Warnungen wie auf dem Dashboard: **keine Überschriften-Struktur** und **`<noscript>`-Element**.
+
+---
+
+### Schritt 5: …
 
 **Datum:**
 **Was war das Problem?**
@@ -391,11 +472,13 @@ Außerdem waren **alle** Schriftgrößen in festen Pixeln (`px`) angegeben. Wenn
 
 ## 5. Endergebnis
 
-**Zwischenstand nach Schritt 3 (25.11.2026):**
+**Zwischenstand nach Schritt 4 (25.11.2026):**
 
 | | Dashboard vorher | Dashboard jetzt | Kontakt vorher | Kontakt jetzt |
 |---|---:|---:|---:|---:|
-| Fehler | 0 | 0 | 4 | 4 |
-| Kontrast-Fehler | 8 | 0 | 3 | 0 |
-| Warnungen | 9 | 2 | 9 | 7 |
-| AIM Score | 6,5 / 10 (65 %) | 10 / 10 (100 %) | 6,2 / 10 (62 %) | 7,4 / 10 (74 %) |
+| Fehler | 0 | 0 | 4 | **0** |
+| Kontrast-Fehler | 8 | **0** | 3 | **0** |
+| Warnungen | 9 | **2** | 9 | **2** |
+| AIM Score | 6,5 / 10 (65 %) | **10 / 10 (100 %)** | 6,2 / 10 (62 %) | **10 / 10 (100 %)** |
+
+Das Ziel von mindestens 90 % ist auf beiden geprüften Seiten erreicht. Offen sind noch: Überschriften-Struktur, `<noscript>`-Hinweis, Navigation bei 200 % Zoom, Tastatur-Bedienung, Live-Kurse für Screenreader, Gewinn/Verlust nicht nur über Farbe, Abmelde-Knopf und die Barrierefreiheitserklärung.

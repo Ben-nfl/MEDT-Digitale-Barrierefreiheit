@@ -56,9 +56,10 @@ import { NotificationService } from '../../services/notification.service';
         <div class="karte">
           <div class="karte-kopf">➕ Coin hinzufügen</div>
           <div class="form">
+            <p class="pflicht-hinweis">Felder mit <span class="pflicht" aria-hidden="true">*</span> sind Pflichtfelder.</p>
             <div class="feld-gruppe suche-container">
-              <label class="feld-beschriftung">Coin suchen</label>
-              <input class="feld-input" [(ngModel)]="suchtext" (ngModelChange)="suchen()"
+              <label class="feld-beschriftung" for="watchlist-suche">Coin suchen</label>
+              <input class="feld-input" id="watchlist-suche" autocomplete="off" [(ngModel)]="suchtext" (ngModelChange)="suchen()"
                      placeholder="z.B. Bitcoin, Ethereum..." />
               <div class="suche-dropdown" *ngIf="suchergebnisse.length > 0">
                 <div class="suche-eintrag" *ngFor="let c of suchergebnisse" (click)="auswaehlen(c)">
@@ -72,14 +73,14 @@ import { NotificationService } from '../../services/notification.service';
               </div>
             </div>
             <div class="feld-gruppe">
-              <label class="feld-beschriftung">Symbol (CoinGecko-ID)</label>
-              <input class="feld-input" [(ngModel)]="neuesSymbol" placeholder="z.B. bitcoin" />
+              <label class="feld-beschriftung" for="watchlist-symbol">Symbol (CoinGecko-ID) <span class="pflicht" aria-hidden="true">*</span></label>
+              <input class="feld-input" id="watchlist-symbol" [(ngModel)]="neuesSymbol" required placeholder="z.B. bitcoin" />
             </div>
             <div class="feld-gruppe">
-              <label class="feld-beschriftung">Name</label>
-              <input class="feld-input" [(ngModel)]="neuerName" placeholder="z.B. Bitcoin" />
+              <label class="feld-beschriftung" for="watchlist-name">Name <span class="pflicht" aria-hidden="true">*</span></label>
+              <input class="feld-input" id="watchlist-name" [(ngModel)]="neuerName" required placeholder="z.B. Bitcoin" />
             </div>
-            <div *ngIf="addFehler" class="fehler-text">{{ addFehler }}</div>
+            <div *ngIf="addFehler" class="fehler-text" role="alert">{{ addFehler }}</div>
             <button class="haupt-knopf" (click)="hinzufuegen()" [disabled]="addLoading" style="margin-top:4px">
               {{ addLoading ? 'Wird hinzugefügt...' : 'Zur Watchlist hinzufügen' }}
             </button>

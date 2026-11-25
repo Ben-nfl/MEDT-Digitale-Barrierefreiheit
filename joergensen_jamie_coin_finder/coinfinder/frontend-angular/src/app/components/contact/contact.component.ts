@@ -28,31 +28,32 @@ import { NotificationService } from '../../services/notification.service';
       <div class="karte">
         <div class="karte-kopf">✉️ Kontaktformular</div>
         <div class="form">
+          <p class="pflicht-hinweis">Felder mit <span class="pflicht" aria-hidden="true">*</span> sind Pflichtfelder.</p>
           <div class="feld-gruppe">
-            <label class="feld-beschriftung">Name</label>
-            <input class="feld-input" [(ngModel)]="name" placeholder="z.B. Max Mustermann" />
+            <label class="feld-beschriftung" for="kontakt-name">Name <span class="pflicht" aria-hidden="true">*</span></label>
+            <input class="feld-input" id="kontakt-name" [(ngModel)]="name" required autocomplete="name" placeholder="z.B. Max Mustermann" />
           </div>
           <div class="feld-gruppe">
-            <label class="feld-beschriftung">E-Mail</label>
-            <input class="feld-input" [(ngModel)]="email" type="email" placeholder="z.B. max@beispiel.at" />
+            <label class="feld-beschriftung" for="kontakt-email">E-Mail <span class="pflicht" aria-hidden="true">*</span></label>
+            <input class="feld-input" id="kontakt-email" [(ngModel)]="email" type="email" required autocomplete="email" placeholder="z.B. max@beispiel.at" />
           </div>
           <div class="feld-gruppe">
-            <label class="feld-beschriftung">Betreff</label>
-            <select class="feld-select" [(ngModel)]="betreff">
+            <label class="feld-beschriftung" for="kontakt-betreff">Betreff</label>
+            <select class="feld-select" id="kontakt-betreff" [(ngModel)]="betreff">
               <option value="frage">Allgemeine Frage</option>
               <option value="fehler">Fehler melden</option>
               <option value="idee">Verbesserungsvorschlag</option>
             </select>
           </div>
           <div class="feld-gruppe">
-            <label class="feld-beschriftung">Nachricht</label>
-            <textarea class="feld-input feld-textarea" [(ngModel)]="nachricht" placeholder="Deine Nachricht..."></textarea>
+            <label class="feld-beschriftung" for="kontakt-nachricht">Nachricht <span class="pflicht" aria-hidden="true">*</span></label>
+            <textarea class="feld-input feld-textarea" id="kontakt-nachricht" [(ngModel)]="nachricht" required placeholder="Deine Nachricht..."></textarea>
           </div>
           <div class="feld-gruppe checkbox-zeile">
-            <input type="checkbox" [(ngModel)]="datenschutz" />
-            <span>Ich bin mit der Verarbeitung meiner Daten einverstanden.</span>
+            <input type="checkbox" id="kontakt-datenschutz" [(ngModel)]="datenschutz" required />
+            <label for="kontakt-datenschutz">Ich bin mit der Verarbeitung meiner Daten einverstanden. <span class="pflicht" aria-hidden="true">*</span></label>
           </div>
-          <div *ngIf="fehler" class="fehler-text" style="margin-bottom: 8px">{{ fehler }}</div>
+          <div *ngIf="fehler" class="fehler-text" role="alert" style="margin-bottom: 8px">{{ fehler }}</div>
           <button class="haupt-knopf" (click)="absenden()">Nachricht senden</button>
         </div>
       </div>

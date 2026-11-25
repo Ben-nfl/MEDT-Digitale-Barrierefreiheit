@@ -157,6 +157,10 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 }
 .feld-select option { background: var(--karte); }
 
+/* Pflichtfelder: Sternchen und Hinweis über dem Formular */
+.pflicht { color: var(--akzent-hell); font-weight: 600; }
+.pflicht-hinweis { font-size: 0.8125rem; color: var(--text-gedimmt); margin-bottom: 4px; }
+
 /* Platzhalter-Text: Chrome-Standard (#757575) hatte nur 3,3 : 1, jetzt 4,7 : 1 */
 ::placeholder { color: var(--text-sehr-gedimmt); opacity: 1; }
 

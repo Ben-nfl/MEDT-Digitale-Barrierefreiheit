@@ -64,16 +64,16 @@ import { AuthService } from '../../services/auth.service';
           User: <code>user</code> / <code>user123</code>
         </div>
 
-        <div class="fehler" *ngIf="fehler">{{ fehler }}</div>
+        <div class="fehler" *ngIf="fehler" role="alert">{{ fehler }}</div>
 
         <div class="feld-gruppe">
-          <label class="feld-beschriftung">Benutzername</label>
-          <input class="feld-input" [(ngModel)]="username" type="text"
+          <label class="feld-beschriftung" for="login-benutzername">Benutzername</label>
+          <input class="feld-input" id="login-benutzername" [(ngModel)]="username" type="text" autocomplete="username" required
                  placeholder="z.B. admin" (keyup.enter)="login()" />
         </div>
         <div class="feld-gruppe">
-          <label class="feld-beschriftung">Passwort</label>
-          <input class="feld-input" [(ngModel)]="password" type="password"
+          <label class="feld-beschriftung" for="login-passwort">Passwort</label>
+          <input class="feld-input" id="login-passwort" [(ngModel)]="password" type="password" autocomplete="current-password" required
                  placeholder="••••••••" (keyup.enter)="login()" />
         </div>
 

@@ -44,22 +44,23 @@ import { NotificationService } from '../../services/notification.service';
         <div class="karte">
           <div class="karte-kopf">🔔 Neuen Alarm erstellen</div>
           <div class="form">
+            <p class="pflicht-hinweis">Felder mit <span class="pflicht" aria-hidden="true">*</span> sind Pflichtfelder.</p>
             <div class="feld-gruppe">
-              <label class="feld-beschriftung">Coin-Symbol (CoinGecko-ID)</label>
-              <input class="feld-input" [(ngModel)]="symbol" placeholder="z.B. bitcoin" />
+              <label class="feld-beschriftung" for="alarm-symbol">Coin-Symbol (CoinGecko-ID) <span class="pflicht" aria-hidden="true">*</span></label>
+              <input class="feld-input" id="alarm-symbol" [(ngModel)]="symbol" required placeholder="z.B. bitcoin" />
             </div>
             <div class="feld-gruppe">
-              <label class="feld-beschriftung">Zielpreis (USD)</label>
-              <input class="feld-input" [(ngModel)]="zielpreis" type="number" placeholder="z.B. 100000" />
+              <label class="feld-beschriftung" for="alarm-zielpreis">Zielpreis (USD) <span class="pflicht" aria-hidden="true">*</span></label>
+              <input class="feld-input" id="alarm-zielpreis" [(ngModel)]="zielpreis" required type="number" placeholder="z.B. 100000" />
             </div>
             <div class="feld-gruppe">
-              <label class="feld-beschriftung">Richtung</label>
-              <select class="feld-select" [(ngModel)]="richtung">
+              <label class="feld-beschriftung" for="alarm-richtung">Richtung</label>
+              <select class="feld-select" id="alarm-richtung" [(ngModel)]="richtung">
                 <option value="above">▲ Alarm wenn Preis ÜBER Zielwert steigt</option>
                 <option value="below">▼ Alarm wenn Preis UNTER Zielwert fällt</option>
               </select>
             </div>
-            <div *ngIf="addFehler" class="fehler-text" style="margin-bottom: 8px">{{ addFehler }}</div>
+            <div *ngIf="addFehler" class="fehler-text" role="alert" style="margin-bottom: 8px">{{ addFehler }}</div>
             <button class="haupt-knopf" (click)="erstellen()" [disabled]="addLoading">
               {{ addLoading ? 'Wird erstellt...' : 'Alarm erstellen' }}
             </button>
