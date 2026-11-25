@@ -13,7 +13,7 @@
 
 ### 1.1 Ergebnis von WAVE
 
-![WAVE-Ergebnis vom Dashboard vor den Verbesserungen](<Bilder/Bildschirmfoto 2026-11-25 um 20.47.15.png>)
+![WAVE-Ergebnis vom Dashboard vor den Verbesserungen](<Bilder/Schritt0 Ausgang WAVE - dashboard Zusammenfassung.png>)
 
 *Bild 1: Die Zusammenfassung von WAVE vor den Verbesserungen*
 
@@ -31,7 +31,7 @@ Ein AIM Score von 6,5 von 10 sind **65 %**. Das Ziel sind mindestens **90 %**.
 
 ### 1.2 Wo die Probleme auf der Seite sind
 
-![Dashboard mit den Markierungen von WAVE](<Bilder/Bildschirmfoto 2026-11-25 um 20.47.24.png>)
+![Dashboard mit den Markierungen von WAVE](<Bilder/Schritt0 Ausgang WAVE - dashboard Markierungen.png>)
 
 *Bild 2: Das Dashboard mit den Markierungen von WAVE. Rote Symbole sind Kontrast-Fehler, orange Symbole („Tr“) sind Warnungen für sehr kleine Schrift.*
 
@@ -42,6 +42,43 @@ Die meisten Markierungen sind an diesen Stellen:
 - beim roten Prozent-Wert bei „Top Verlierer“
 - beim Knopf oben rechts
 - in der Tabelle „Aktuelle Kurse“ bei den kleinen grauen Namen neben den Coins (z. B. „RIPPLE“, „BITCOIN“)
+
+### 1.3 Weitere Seiten im Ausgangszustand: Login und Watchlist
+
+Diese Messungen wurden an der **unveränderten Original-Version** gemacht (lokal auf Port 3002, noch ohne Kontakt-Seite). Sie zeigen, dass die Probleme nicht nur das Dashboard betreffen.
+
+![WAVE-Zusammenfassung Login vorher](<Bilder/Schritt0 Ausgang WAVE - login Zusammenfassung.png>)
+
+*Bild A: WAVE auf der Login-Seite im Ausgangszustand. 2 Fehler, 2 Kontrast-Fehler, AIM Score 6,9 von 10.*
+
+![Login mit WAVE-Markierungen vorher](<Bilder/Schritt0 Ausgang WAVE - login Markierungen.png>)
+
+*Bild B: Die Login-Seite mit den WAVE-Markierungen. Rote Kontrast-Symbole beim Logo und beim Knopf „Einloggen“, rote Etiketten bei den nicht beschrifteten Feldern.*
+
+![WAVE-Zusammenfassung Watchlist vorher](<Bilder/Schritt0 Ausgang WAVE - watchlist Zusammenfassung.png>)
+
+*Bild C: WAVE auf der Watchlist im Ausgangszustand. 3 Fehler, 3 Kontrast-Fehler, 12 Warnungen, AIM Score 6,8 von 10.*
+
+![Watchlist mit WAVE-Markierungen vorher](<Bilder/Schritt0 Ausgang WAVE - watchlist Markierungen.png>)
+
+*Bild D: Die Watchlist mit den WAVE-Markierungen. Viele „Tr“-Symbole (sehr kleine Schrift) bei den Coin-Namen, rote Etiketten bei den drei Formularfeldern.*
+
+| Was WAVE zählt | Login | Watchlist |
+|----------------|------:|----------:|
+| Fehler (Errors) | 2 | 3 |
+| Kontrast-Fehler | 2 | 3 |
+| Warnungen (Alerts) | 5 | 12 |
+| Features | 1 | 1 |
+| Struktur-Elemente | 1 | 6 |
+| ARIA | 0 | 0 |
+| **AIM Score** | **6,9 von 10 (69 %)** | **6,8 von 10 (68 %)** |
+
+**Was WAVE gefunden hat:**
+
+- **Login:** 2 × „Missing form label“ (Benutzername und Passwort ohne verbundene Beschriftung), 2 × „Very low contrast“ (Logo-Symbol und weiße Schrift auf dem orangen Knopf), dazu die Warnungen 2 × „Orphaned form label“, „No page regions“, „Missing first level heading“ („Willkommen zurück“ war ein `<h2>` statt `<h1>`) und „Noscript element“.
+- **Watchlist:** 3 × „Missing form label“ (Suche, Symbol, Name), 3 × „Very low contrast“ (Logo-Symbol, „NAVIGATION“, oranger Knopf), dazu 12 Warnungen, darunter 3 × „Orphaned form label“ und viele „Very small text“ bei den grauen Coin-Namen in der Tabelle.
+
+Das sind dieselben Ursachen wie beim Dashboard und beim Kontaktformular: zu dunkles Grau und Orange, zu kleine Schrift, nicht verbundene Beschriftungen und fehlende Überschriften. Behoben wurden sie in den Schritten 2 bis 5.
 
 ---
 
@@ -177,7 +214,7 @@ Die App hatte bisher nur wenige Eingabefelder. Formulare sind aber ein wichtiger
 
 **Ergebnis in WAVE (Kontakt-Seite, Ausgangszustand):**
 
-![WAVE-Ergebnis der Kontakt-Seite vor den Verbesserungen](<Bilder/Bildschirmfoto 2026-11-25 um 21.00.01.png>)
+![WAVE-Ergebnis der Kontakt-Seite vor den Verbesserungen](<Bilder/Schritt1 Kontaktformular WAVE vorher - contact.png>)
 
 *Bild 3: WAVE auf der neuen Kontakt-Seite. Links die Zusammenfassung, rechts die Markierungen im Formular.*
 
@@ -350,15 +387,15 @@ Außerdem waren **alle** Schriftgrößen in festen Pixeln (`px`) angegeben. Wenn
 
 **Ergebnis in WAVE danach (nach Schritt 2 und 3):**
 
-![WAVE-Zusammenfassung Dashboard nach Schritt 3](<Bilder/Bildschirmfoto 2026-11-25 um 21.26.36.png>)
+![WAVE-Zusammenfassung Dashboard nach Schritt 3](<Bilder/Schritt3 WAVE nachher - dashboard Zusammenfassung.png>)
 
 *Bild 12: WAVE auf dem Dashboard nach Schritt 2 und 3. Keine Fehler, keine Kontrast-Fehler, AIM Score 10 von 10.*
 
-![Dashboard mit WAVE-Markierungen nach Schritt 3](<Bilder/Bildschirmfoto 2026-11-25 um 21.26.42.png>)
+![Dashboard mit WAVE-Markierungen nach Schritt 3](<Bilder/Schritt3 WAVE nachher - dashboard Markierungen.png>)
 
 *Bild 13: Das Dashboard mit den WAVE-Markierungen. Es gibt keine roten Kontrast-Symbole und keine „Tr“-Symbole für kleine Schrift mehr.*
 
-![WAVE auf der Kontakt-Seite nach Schritt 3](<Bilder/Bildschirmfoto 2026-11-25 um 21.27.10.png>)
+![WAVE auf der Kontakt-Seite nach Schritt 3](<Bilder/Schritt3 WAVE nachher - contact.png>)
 
 *Bild 14: WAVE auf der Kontakt-Seite nach Schritt 2 und 3. Die Kontrast-Fehler sind weg. Die Fehler bei den Formular-Beschriftungen sind noch da.*
 
@@ -438,7 +475,7 @@ Dazu kamen:
 
 **Ergebnis in WAVE danach:**
 
-![WAVE auf der Kontakt-Seite nach Schritt 4](<Bilder/Bildschirmfoto 2026-11-25 um 21.36.07.png>)
+![WAVE auf der Kontakt-Seite nach Schritt 4](<Bilder/Schritt4 WAVE nachher - contact.png>)
 
 *Bild 18: WAVE auf der Kontakt-Seite nach Schritt 4. Keine Fehler mehr, AIM Score 10 von 10. Die grünen Symbole zeigen die 5 richtig verbundenen Beschriftungen („Form label“).*
 
@@ -528,15 +565,15 @@ WAVE meldet `<noscript>` trotzdem weiter als **Warnung**. Das ist kein Fehler: W
 
 **Ergebnis in WAVE danach:**
 
-![WAVE-Zusammenfassung Dashboard nach Schritt 5](<Bilder/Bildschirmfoto 2026-11-25 um 21.43.12.png>)
+![WAVE-Zusammenfassung Dashboard nach Schritt 5](<Bilder/Schritt5 WAVE nachher - dashboard Zusammenfassung.png>)
 
 *Bild 21: WAVE auf dem Dashboard nach Schritt 5. Nur noch 1 Warnung (`<noscript>`). Neu unter „Structural Elements“: 1 × Heading level 1 und 5 × Heading level 2.*
 
-![Dashboard mit WAVE-Markierungen nach Schritt 5](<Bilder/Bildschirmfoto 2026-11-25 um 21.43.20.png>)
+![Dashboard mit WAVE-Markierungen nach Schritt 5](<Bilder/Schritt5 WAVE nachher - dashboard Markierungen.png>)
 
 *Bild 22: Das Dashboard mit den WAVE-Markierungen. Man sieht „h1“ bei „Dashboard“ und „h2“ bei den Karten-Titeln.*
 
-![WAVE auf der Kontakt-Seite nach Schritt 5](<Bilder/Bildschirmfoto 2026-11-25 um 21.43.39.png>)
+![WAVE auf der Kontakt-Seite nach Schritt 5](<Bilder/Schritt5 WAVE nachher - contact.png>)
 
 *Bild 23: WAVE auf der Kontakt-Seite nach Schritt 5. „h1“ bei „Kontakt“, „h2“ bei „Kontaktformular“, nur noch 1 Warnung.*
 
@@ -627,19 +664,19 @@ Die Erklärung folgt der EU-Mustererklärung (Durchführungsbeschluss (EU) 2018/
 
 **Ergebnis in WAVE danach:**
 
-![WAVE-Zusammenfassung der Erklärungs-Seite](<Bilder/Bildschirmfoto 2026-11-25 um 21.53.02.png>)
+![WAVE-Zusammenfassung der Erklärungs-Seite](<Bilder/Schritt6 WAVE nachher - barrierefreiheit Zusammenfassung.png>)
 
 *Bild 28: WAVE auf der Seite „Erklärung zur Barrierefreiheit“. 0 Fehler, AIM Score 10 von 10. WAVE erkennt 1 × h1, 7 × h2, 2 × h3, 3 Listen und den Hauptbereich.*
 
-![Erklärungs-Seite mit WAVE-Markierungen](<Bilder/Bildschirmfoto 2026-11-25 um 21.53.06.png>)
+![Erklärungs-Seite mit WAVE-Markierungen](<Bilder/Schritt6 WAVE nachher - barrierefreiheit Markierungen.png>)
 
 *Bild 29: Die Erklärungs-Seite mit den WAVE-Markierungen. Die violetten Symbole zeigen die Abschnitte, die mit `aria-labelledby` nach ihrer Überschrift benannt sind.*
 
-![WAVE-Zusammenfassung der Login-Seite](<Bilder/Bildschirmfoto 2026-11-25 um 21.53.57.png>)
+![WAVE-Zusammenfassung der Login-Seite](<Bilder/Schritt6 WAVE nachher - login Zusammenfassung.png>)
 
 *Bild 30: WAVE auf der Login-Seite. 0 Fehler, AIM Score 10 von 10, 2 Warnungen.*
 
-![Login-Seite mit WAVE-Markierungen](<Bilder/Bildschirmfoto 2026-11-25 um 21.54.00.png>)
+![Login-Seite mit WAVE-Markierungen](<Bilder/Schritt6 WAVE nachher - login Markierungen.png>)
 
 *Bild 31: Die Login-Seite mit den WAVE-Markierungen. Die beiden Felder sind richtig beschriftet („Form label“), der Link zur Erklärung ist unter dem Knopf.*
 
@@ -749,19 +786,19 @@ Ich habe die App nur mit der Tastatur bedient: `Tab` zum nächsten Element, `Ent
 
 **Ergebnis in WAVE danach:**
 
-![WAVE-Zusammenfassung Dashboard nach Schritt 8](<Bilder/Bildschirmfoto 2026-11-25 um 22.03.43.png>)
+![WAVE-Zusammenfassung Dashboard nach Schritt 8](<Bilder/Schritt8 WAVE nachher - dashboard Zusammenfassung.png>)
 
 *Bild 37: WAVE auf dem Dashboard nach Schritt 8. 0 Fehler, AIM Score 10 von 10.*
 
-![Dashboard mit WAVE-Markierungen nach Schritt 8](<Bilder/Bildschirmfoto 2026-11-25 um 22.03.46.png>)
+![Dashboard mit WAVE-Markierungen nach Schritt 8](<Bilder/Schritt8 WAVE nachher - dashboard Markierungen.png>)
 
 *Bild 38: Das Dashboard mit den WAVE-Markierungen. Unten zeigt WAVE das `tabindex="-1"` am Hauptbereich (Ziel des Sprunglinks), in der Seitenleiste das versteckte ♿-Symbol.*
 
-![WAVE-Zusammenfassung Watchlist nach Schritt 8](<Bilder/Bildschirmfoto 2026-11-25 um 22.04.03.png>)
+![WAVE-Zusammenfassung Watchlist nach Schritt 8](<Bilder/Schritt8 WAVE nachher - watchlist Zusammenfassung.png>)
 
 *Bild 39: WAVE auf der Watchlist nach Schritt 8. 0 Fehler, AIM Score 10 von 10, 3 richtig beschriftete Formularfelder.*
 
-![Watchlist mit WAVE-Markierungen nach Schritt 8](<Bilder/Bildschirmfoto 2026-11-25 um 22.04.07.png>)
+![Watchlist mit WAVE-Markierungen nach Schritt 8](<Bilder/Schritt8 WAVE nachher - watchlist Markierungen.png>)
 
 *Bild 40: Die Watchlist mit den WAVE-Markierungen. Beim Suchfeld sieht man `aria-describedby` und das Lautsprecher-Symbol für den `aria-live`-Hinweis „… Vorschläge gefunden“.*
 
@@ -796,14 +833,15 @@ Ich habe die App nur mit der Tastatur bedient: `Tab` zum nächsten Element, `Ent
 
 ## 5. Endergebnis
 
-**Zwischenstand nach Schritt 6 (25.11.2026):**
+**Zwischenstand nach Schritt 8 (25.11.2026):**
 
 | Seite | Fehler vorher | Fehler jetzt | Kontrast-Fehler vorher | Kontrast-Fehler jetzt | Warnungen vorher | Warnungen jetzt | AIM Score vorher | AIM Score jetzt |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | Dashboard | 0 | 0 | 8 | **0** | 9 | **1** | 6,5 (65 %) | **10 (100 %)** |
 | Kontakt | 4 | **0** | 3 | **0** | 9 | **1** | 6,2 (62 %) | **10 (100 %)** |
+| Watchlist | 3 | **0** | 3 | **0** | 12 | **1** | 6,8 (68 %) | **10 (100 %)** |
+| Login | 2 | **0** | 2 | **0** | 5 | **2** | 6,9 (69 %) | **10 (100 %)** |
 | Erklärung (neu) | – | 0 | – | 0 | – | 1 | – | **10 (100 %)** |
-| Login | – | 0 | – | 0 | – | 2 | – | **10 (100 %)** |
 
 Das Ziel von mindestens 90 % ohne kritische Fehler ist auf allen geprüften Seiten erreicht. Die Barrierefreiheitserklärung ist als eigene Unterseite eingebaut und von der Startseite verlinkt.
 Die Warnung `<noscript>` ist geprüft und beabsichtigt.
