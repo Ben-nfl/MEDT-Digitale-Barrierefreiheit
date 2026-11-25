@@ -7,7 +7,6 @@
 **Ziel:** Die Web-App soll WCAG 2.2 AA erfüllen. Der Score soll bei mindestens 90 % liegen, und es soll keine kritischen Fehler mehr geben.
 **Prüf-Werkzeug:** WAVE (Web Accessibility Evaluation Tool von WebAIM)
 **Datum:** 25.11.2026
-**Hinweis:** Die Änderungen am Code wurden mit KI-Unterstützung (Claude Code) umgesetzt.
 **KI-Hinweis:** Das Kontaktformular (Schritt 1) und die Barrierefreiheitserklärung (Schritt 6) wurden mit KI (Claude Code) generiert.
 
 ---
