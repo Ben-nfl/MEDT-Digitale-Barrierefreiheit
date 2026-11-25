@@ -1,0 +1,171 @@
+/* ===== Reset & Grundeinstellungen ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --hintergrund:       #0f1117;
+  --karte:             #1a1d27;
+  --karte-hover:       #1f2335;
+  --rand:              #2a2d3e;
+  --rand-hell:         #363a52;
+  --text:              #e8e9f0;
+  --text-gedimmt:      #8a8fa8;
+  --text-sehr-gedimmt: #4a4e66;
+  --akzent:            #f97316;
+  --akzent-hell:       #fb923c;
+  --akzent-schwach:    rgba(249, 115, 22, 0.12);
+  --gruen:             #22c55e;
+  --gruen-schwach:     rgba(34, 197, 94, 0.1);
+  --rot:               #ef4444;
+  --rot-schwach:       rgba(239, 68, 68, 0.1);
+  --blau:              #3b82f6;
+  --ecke:              12px;
+  --ecke-klein:        8px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--hintergrund);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: var(--rand-hell); border-radius: 3px; }
+
+/* ===== Tabellen ===== */
+table { width: 100%; border-collapse: collapse; }
+
+th {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-sehr-gedimmt);
+  padding: 10px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--rand);
+  background: rgba(255,255,255,0.01);
+}
+
+td {
+  padding: 13px 18px;
+  font-size: 13.5px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* ===== Utility ===== */
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.badge.hoch { background: var(--gruen-schwach); color: var(--gruen); }
+.badge.tief { background: var(--rot-schwach); color: var(--rot); }
+
+.haupt-knopf {
+  background: var(--akzent);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: var(--ecke-klein);
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.15s;
+  box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
+}
+.haupt-knopf:hover {
+  background: var(--akzent-hell);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(249, 115, 22, 0.4);
+}
+.haupt-knopf:active { transform: none; }
+.haupt-knopf:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.aktion-btn {
+  background: transparent;
+  border: 1px solid var(--rand-hell);
+  color: var(--text-gedimmt);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Inter', sans-serif;
+  margin: 0 2px;
+}
+.aktion-btn:hover {
+  border-color: var(--rot);
+  color: var(--rot);
+  background: var(--rot-schwach);
+}
+.aktion-btn.reset:hover {
+  border-color: var(--gruen);
+  color: var(--gruen);
+  background: var(--gruen-schwach);
+}
+
+.lade-text { font-size: 13px; color: var(--text-gedimmt); padding: 20px 18px; }
+.fehler-text { font-size: 11.5px; color: var(--rot); margin-top: 5px; }
+
+.feld-beschriftung {
+  font-size: 12px;
+  color: var(--text-gedimmt);
+  margin-bottom: 5px;
+  display: block;
+  font-weight: 500;
+}
+.feld-gruppe { margin-bottom: 13px; }
+
+.feld-input, .feld-select {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--rand-hell);
+  color: var(--text);
+  padding: 9px 11px;
+  border-radius: var(--ecke-klein);
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.feld-input:focus, .feld-select:focus {
+  border-color: var(--akzent);
+  box-shadow: 0 0 0 3px var(--akzent-schwach);
+}
+.feld-select option { background: var(--karte); }
+
+/* Benachrichtigungen */
+@keyframes einblenden {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes preis-flash {
+  0%   { color: var(--akzent-hell); }
+  100% { color: var(--text); }
+}
+
+.preis-update { animation: preis-flash 0.6s ease; }

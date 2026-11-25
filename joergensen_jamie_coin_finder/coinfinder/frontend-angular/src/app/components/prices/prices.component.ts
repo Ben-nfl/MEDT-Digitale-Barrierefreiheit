@@ -1,0 +1,201 @@
+import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { CommonModule, DecimalPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { LayoutComponent } from '../shared/layout/layout.component';
+import { ApiService } from '../../services/api.service';
+import { WebsocketService } from '../../services/websocket.service';
+import { Subscription } from 'rxjs';
+
+// Chart.js wird über CDN geladen – wir deklarieren es global
+declare const Chart: any;
+
+@Component({
+  selector: 'app-prices',
+  standalone: true,
+  imports: [CommonModule, DecimalPipe, FormsModule, LayoutComponent],
+  styles: [`
+    .kopf { margin-bottom: 22px; }
+    .titel { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+    .unter { font-size: 13px; color: var(--text-gedimmt); }
+    .karte { background: var(--karte); border: 1px solid var(--rand); border-radius: var(--ecke); overflow: hidden; margin-bottom: 16px; }
+    .karte-kopf { padding: 14px 18px; border-bottom: 1px solid var(--rand); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .karte-titel { font-size: 14px; font-weight: 600; }
+    .tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+    .tabs button {
+      background: transparent; border: 1px solid var(--rand);
+      color: var(--text-gedimmt); padding: 3px 9px; border-radius: 5px;
+      font-size: 11.5px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s;
+    }
+    .tabs button.aktiv, .tabs button:hover {
+      background: var(--akzent-schwach); border-color: rgba(249,115,22,0.4); color: var(--akzent-hell);
+    }
+    .chart-bereich { padding: 16px; height: 260px; position: relative; }
+    .symbol-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      color: var(--text-sehr-gedimmt); background: rgba(255,255,255,0.04);
+      padding: 2px 6px; border-radius: 4px; margin-left: 6px;
+    }
+  `],
+  template: `
+    <app-layout>
+      <div class="kopf">
+        <div class="titel">Kurse</div>
+        <div class="unter">Preisverläufe und aktuelle Kursdaten</div>
+      </div>
+
+      <!-- Chart -->
+      <div class="karte">
+        <div class="karte-kopf">
+          <div>
+            <span class="karte-titel">Kursverlauf</span>
+          </div>
+          <div style="display:flex; gap: 8px; flex-wrap: wrap">
+            <div class="tabs">
+              <button *ngFor="let c of watchlist" [class.aktiv]="ausgewaehlteCoin === c.symbol"
+                      (click)="waehleCoin(c.symbol)">{{ c.name }}</button>
+            </div>
+            <div class="tabs">
+              <button *ngFor="let d of [7,14,30]" [class.aktiv]="ausgewaehlteZeit === d"
+                      (click)="waehleZeit(d)">{{ d }}T</button>
+            </div>
+          </div>
+        </div>
+        <div class="chart-bereich">
+          <canvas #chartCanvas></canvas>
+        </div>
+      </div>
+
+      <!-- Preistabelle -->
+      <div class="karte">
+        <div class="karte-kopf">
+          <div class="karte-titel">Aktuelle Preise</div>
+          <span style="font-size:11px; color: var(--text-sehr-gedimmt)">Letzte Aktualisierung: {{ letzteAkt }}</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Coin</th><th>Preis</th><th>24h %</th><th>Marktkapitalisierung</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="loading"><td class="lade-text" colspan="4">Lade Preise...</td></tr>
+            <tr *ngFor="let r of preisRows">
+              <td><strong>{{ r.name }}</strong><span class="symbol-tag">{{ r.symbol.toUpperCase() }}</span></td>
+              <td class="mono">$<span>{{ r.preis | number:'1.2-2' }}</span></td>
+              <td>
+                <span class="badge" [class.hoch]="r.change >= 0" [class.tief]="r.change < 0">
+                  {{ r.change >= 0 ? '▲' : '▼' }} {{ r.change | number:'1.2-2' }}%
+                </span>
+              </td>
+              <td class="mono">{{ formatMcap(r.mcap) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </app-layout>
+  `
+})
+export class PricesComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
+
+  watchlist: any[] = [];
+  preisRows: any[] = [];
+  letzteAkt = '–';
+  loading = true;
+  ausgewaehlteCoin = '';
+  ausgewaehlteZeit = 7;
+  private chart: any;
+  private sub!: Subscription;
+
+  constructor(private api: ApiService, private ws: WebsocketService) {}
+
+  ngOnInit(): void {
+    this.api.getWatchlist().subscribe(r => {
+      if (r.success) {
+        this.watchlist = r.data;
+        if (this.watchlist.length) {
+          this.ausgewaehlteCoin = this.watchlist[0].symbol;
+          this.ladeHistorie();
+        }
+      }
+    });
+    this.ladePreise();
+    this.sub = this.ws.messages$.subscribe(msg => {
+      if (msg.type === 'price_update') {
+        this.aktualisierePreise(msg.payload.prices);
+        this.letzteAkt = new Date().toLocaleTimeString('de-AT');
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.initChart();
+  }
+
+  ngOnDestroy(): void { this.sub?.unsubscribe(); }
+
+  ladePreise(): void {
+    this.api.getCurrentPrices().subscribe(r => {
+      if (r.success) this.aktualisierePreise(r.data);
+      this.loading = false;
+    });
+  }
+
+  aktualisierePreise(prices: any): void {
+    this.preisRows = this.watchlist.map(coin => ({
+      symbol: coin.symbol, name: coin.name,
+      preis: prices[coin.symbol]?.usd ?? 0,
+      change: prices[coin.symbol]?.usd_24h_change ?? 0,
+      mcap: prices[coin.symbol]?.usd_market_cap ?? 0,
+    }));
+  }
+
+  waehleCoin(symbol: string): void {
+    this.ausgewaehlteCoin = symbol;
+    this.ladeHistorie();
+  }
+
+  waehleZeit(days: number): void {
+    this.ausgewaehlteZeit = days;
+    this.ladeHistorie();
+  }
+
+  ladeHistorie(): void {
+    if (!this.ausgewaehlteCoin) return;
+    this.api.getPriceHistory(this.ausgewaehlteCoin, this.ausgewaehlteZeit).subscribe(r => {
+      if (r.success && this.chart) {
+        const labels = r.data.map((p: any) => new Date(p.timestamp).toLocaleDateString('de-AT'));
+        const data   = r.data.map((p: any) => p.price);
+        this.chart.data.labels = labels;
+        this.chart.data.datasets[0].data = data;
+        this.chart.data.datasets[0].label = this.ausgewaehlteCoin.toUpperCase();
+        this.chart.update();
+      }
+    });
+  }
+
+  initChart(): void {
+    if (!this.chartCanvas || typeof Chart === 'undefined') return;
+    const ctx = this.chartCanvas.nativeElement.getContext('2d');
+    if (!ctx) return;
+
+    this.chart = new Chart(ctx, {
+      type: 'line',
+      data: { labels: [], datasets: [{ label: '', data: [], borderColor: '#f97316', backgroundColor: 'rgba(249,115,22,0.08)', borderWidth: 2, pointRadius: 2, fill: true, tension: 0.3 }] },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#4a4e66', maxTicksLimit: 7 }, grid: { color: 'rgba(255,255,255,0.04)' } },
+          y: { ticks: { color: '#4a4e66', callback: (v: number) => '$' + v.toLocaleString() }, grid: { color: 'rgba(255,255,255,0.06)' } }
+        }
+      }
+    });
+  }
+
+  formatMcap(n: number): string {
+    if (n >= 1e12) return `$${(n / 1e12).toFixed(2)}T`;
+    if (n >= 1e9)  return `$${(n / 1e9).toFixed(2)}B`;
+    return `$${n.toLocaleString()}`;
+  }
+}

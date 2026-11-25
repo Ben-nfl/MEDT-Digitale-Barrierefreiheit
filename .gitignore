@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Installierte Abhängigkeiten und generierte Dateien
+node_modules/
+dist/
+.angular/
+coverage/
+*.log
+
+# Lokale Zugangsdaten
+.env
+.env.*
+!.env.example
+!.env.sample
