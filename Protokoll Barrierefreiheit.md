@@ -1,0 +1,251 @@
+# Protokoll: CoinFinder barrierefrei machen
+
+**Projekt:** CoinFinder (MEDT-Projekt aus der 4. Klasse)
+**Ziel:** Die Web-App soll WCAG 2.2 AA erfüllen. Der Score soll bei mindestens 90 % liegen, und es soll keine kritischen Fehler mehr geben.
+**Prüf-Werkzeug:** WAVE (Web Accessibility Evaluation Tool von WebAIM)
+
+---
+
+## 1. Ausgangslage (Ist-Analyse)
+
+**Datum:** 25.11.2026
+**Geprüfte Seite:** Dashboard (`http://localhost:3001/dashboard`)
+
+### 1.1 Ergebnis von WAVE
+
+![WAVE-Ergebnis vom Dashboard vor den Verbesserungen](<Bilder/Bildschirmfoto 2026-11-25 um 20.47.15.png>)
+
+*Bild 1: Die Zusammenfassung von WAVE vor den Verbesserungen*
+
+| Was WAVE zählt     | Anzahl |
+|--------------------|-------:|
+| Fehler (Errors)    | 0      |
+| Kontrast-Fehler    | 8      |
+| Warnungen (Alerts) | 9      |
+| Features           | 1      |
+| Struktur-Elemente  | 7      |
+| ARIA               | 0      |
+| **AIM Score**      | **6,5 von 10** |
+
+Ein AIM Score von 6,5 von 10 sind **65 %**. Das Ziel sind mindestens **90 %**.
+
+### 1.2 Wo die Probleme auf der Seite sind
+
+![Dashboard mit den Markierungen von WAVE](<Bilder/Bildschirmfoto 2026-11-25 um 20.47.24.png>)
+
+*Bild 2: Das Dashboard mit den Markierungen von WAVE. Rote Symbole sind Kontrast-Fehler, orange Symbole („Tr“) sind Warnungen für sehr kleine Schrift.*
+
+Die meisten Markierungen sind an diesen Stellen:
+
+- in der Seitenleiste beim Logo „CoinFinder“ und beim Wort „NAVIGATION“
+- bei den Überschriften der 4 Karten („COINS BEOBACHTET“, „AKTIVE ALARME“, „TOP GEWINNER“, „TOP VERLIERER“)
+- beim roten Prozent-Wert bei „Top Verlierer“
+- beim Knopf oben rechts
+- in der Tabelle „Aktuelle Kurse“ bei den kleinen grauen Namen neben den Coins (z. B. „RIPPLE“, „BITCOIN“)
+
+---
+
+## 2. Die Probleme in einfacher Sprache
+
+### Problem 1: Zu wenig Kontrast (8 Kontrast-Fehler)
+
+**Was ist das Problem?**
+Manche Texte sind dunkelgrau auf fast schwarzem Hintergrund. Man kann sie kaum lesen. Für Menschen mit Sehschwäche sind sie unsichtbar. Das ist auch so bei hellem Sonnenlicht auf dem Handy.
+
+**Was verlangt die Regel?**
+WCAG 2.2 AA, Kriterium **1.4.3 Kontrast (Minimum)**: Normaler Text braucht einen Kontrast von mindestens **4,5 : 1**. Großer Text braucht mindestens **3 : 1**.
+
+**Woher kommt es im Code?**
+In `styles.css` gibt es die Farbe `--text-sehr-gedimmt: #4a4e66`. Auf dem Karten-Hintergrund `#1a1d27` hat sie nur einen Kontrast von etwa **2 : 1**. Diese Farbe wird an vielen Stellen benutzt, z. B. für „NAVIGATION“, für die Karten-Überschriften und für die Coin-Namen in der Tabelle.
+Auch das Rot `--rot: #ef4444` ist auf dem dunklen Hintergrund knapp zu schwach (etwa 4,4 : 1).
+
+**Mögliche Lösung:**
+Die grauen Farben heller machen, bis der Kontrast mindestens 4,5 : 1 ist. Das Rot etwas heller machen.
+
+---
+
+### Problem 2: Sehr kleine Schrift (7 Warnungen)
+
+**Was ist das Problem?**
+Viele Texte sind nur **9 bis 11 Pixel** groß. Das ist für viele Menschen zu klein. Wer die Seite vergrößert, bekommt oft ein kaputtes Layout.
+
+**Was verlangt die Regel?**
+WCAG 2.2 AA, Kriterium **1.4.4 Textgröße ändern**: Man muss den Text auf 200 % vergrößern können, ohne dass Inhalt verloren geht. Sehr kleine, feste Pixel-Größen machen das schwer.
+
+**Woher kommt es im Code?**
+In mehreren Komponenten stehen feste Größen wie `font-size: 10px` oder `font-size: 11px`. Beispiele:
+`dashboard.component.ts`, `layout.component.ts`, `watchlist.component.ts`, `prices.component.ts`, `alerts.component.ts`.
+
+**Mögliche Lösung:**
+Mindestens 12–14 Pixel verwenden. Besser `rem` statt `px` verwenden, damit die Schrift mit den Browser-Einstellungen mitwächst.
+
+---
+
+### Problem 3: Keine Überschriften-Struktur (1 Warnung)
+
+**Was ist das Problem?**
+Die Seite hat keine richtigen Überschriften (`<h1>`, `<h2>` …). „Dashboard“ sieht zwar wie eine Überschrift aus, ist im Code aber nur normaler Text. Ein Screenreader liest die Seite dann ohne Gliederung vor. Blinde Menschen können nicht von Abschnitt zu Abschnitt springen.
+
+**Was verlangt die Regel?**
+WCAG 2.2 AA, Kriterium **1.3.1 Info und Beziehungen** und **2.4.6 Überschriften und Beschriftungen**: Was wie eine Überschrift aussieht, muss auch im Code eine Überschrift sein.
+
+**Mögliche Lösung:**
+„Dashboard“ als `<h1>`, „Aktuelle Kurse“ und die Karten-Titel als `<h2>` auszeichnen.
+
+---
+
+### Problem 4: Hinweis wenn JavaScript aus ist (1 Warnung)
+
+**Was ist das Problem?**
+WAVE hat ein `<noscript>`-Element gefunden. Die App funktioniert nur mit JavaScript. Ohne JavaScript sieht man nichts.
+
+**Mögliche Lösung:**
+Im `<noscript>` einen klaren deutschen Hinweis einfügen, z. B. „Bitte aktiviere JavaScript, um CoinFinder zu nutzen.“ Diese Warnung ist nicht kritisch, sie muss nur geprüft werden.
+
+---
+
+### Weitere Punkte, die WAVE nicht direkt zeigt
+
+Diese Punkte gehören auch zu WCAG 2.2 AA und sollen geprüft werden:
+
+| Punkt | Problem | WCAG-Kriterium |
+|-------|---------|----------------|
+| Abmelde-Knopf | Der Knopf zeigt nur ein „✕“. Ein Screenreader weiß nicht genau, was der Knopf macht. | 4.1.2 Name, Rolle, Wert |
+| Farbe allein | Gewinn und Verlust sind nur durch Grün und Rot erkennbar. Menschen mit Rot-Grün-Schwäche sehen den Unterschied schwer. | 1.4.1 Benutzung von Farbe |
+| Tastatur | Es muss geprüft werden, ob man alles nur mit der Tastatur (Tab-Taste) bedienen kann und ob man immer sieht, wo man gerade ist (Fokus-Rahmen). | 2.1.1 Tastatur, 2.4.7 Fokus sichtbar |
+| Live-Kurse | Die Kurse ändern sich automatisch. Ein Screenreader bekommt das nicht mit. | 4.1.3 Statusmeldungen |
+| Barrierefreiheitserklärung | Die App hat noch keine Barrierefreiheitserklärung. Sie muss als eigene Unterseite mit gut sichtbarem Link auf der Startseite eingebaut werden. | Aufgabenstellung |
+
+---
+
+## 3. Plan: Was ich verbessern will
+
+- [ ] Kontrast-Farben in `styles.css` anpassen (Problem 1)
+- [ ] Schriftgrößen vergrößern und auf `rem` umstellen (Problem 2)
+- [ ] Überschriften-Struktur einbauen (Problem 3)
+- [ ] `<noscript>`-Hinweis prüfen (Problem 4)
+- [ ] Abmelde-Knopf beschriften
+- [ ] Gewinn/Verlust nicht nur über Farbe zeigen
+- [ ] Tastatur-Bedienung und Fokus prüfen
+- [ ] Live-Kurse für Screenreader ansagen
+- [ ] Unterseite „Barrierefreiheitserklärung“ erstellen und verlinken
+- [ ] Alle Seiten erneut mit WAVE prüfen (Login, Dashboard, Watchlist, Alarme, Kurse, Kontakt)
+
+---
+
+## 4. Laufende Dokumentation der Änderungen
+
+> Hier trage ich jeden Schritt ein, sobald ich ihn umgesetzt habe.
+
+### Schritt 1: Kontaktformular hinzugefügt (Testobjekt)
+
+**Datum:** 25.11.2026
+**Hinweis:** Dieser Schritt wurde mit KI-Unterstützung (Claude Code) umgesetzt.
+
+**Warum?**
+Die App hatte bisher nur wenige Eingabefelder. Formulare sind aber ein wichtiger Teil der Barrierefreiheit. Gerade dort gibt es oft Probleme. Mit einem Kontaktformular kann ich die Barrierefreiheit besser testen.
+
+**Was wurde gemacht?**
+- Neue Seite **„Kontakt“** mit einem Kontaktformular.
+- Neuer Link **„Kontakt“** (mit Brief-Symbol) in der Seitenleiste links, unter „Kurse“.
+- Das Formular hat diese Felder: Name, E-Mail, Betreff (Auswahl), Nachricht und eine Checkbox für den Datenschutz.
+- Beim Klick auf „Nachricht senden“ wird geprüft, ob alles ausgefüllt ist. Wenn etwas fehlt, kommt eine rote Fehlermeldung. Wenn alles passt, kommt die Meldung „Nachricht gesendet“.
+- Die Nachricht wird **nicht** an den Server geschickt. Das Formular ist nur zum Testen da.
+- Sonst wurde nichts an der App geändert.
+
+**Geänderte Dateien:**
+
+| Datei | Änderung |
+|-------|----------|
+| `frontend-angular/src/app/components/contact/contact.component.ts` | neu: die Kontakt-Seite mit dem Formular |
+| `frontend-angular/src/app/app.routes.ts` | neue Route `/contact` |
+| `frontend-angular/src/app/components/shared/layout/layout.component.ts` | neuer Link „Kontakt“ in der Seitenleiste |
+
+**Das Formular ist im gleichen Stil gebaut wie der Rest der App.** Darum hat es wahrscheinlich die gleichen Barrieren. Diese Punkte will ich mit WAVE prüfen:
+
+| Punkt | Mögliches Problem | WCAG-Kriterium |
+|-------|-------------------|----------------|
+| Beschriftungen | Die `<label>`-Texte sind nicht mit dem Eingabefeld verbunden (kein `for`/`id`). Ein Screenreader liest dann beim Feld keinen Namen vor. | 1.3.1, 3.3.2, 4.1.2 |
+| Checkbox | Die Datenschutz-Checkbox hat keine richtige Beschriftung. Man kann nicht auf den Text klicken. | 3.3.2, 4.1.2 |
+| Platzhalter-Text | Der graue Platzhalter („z.B. Max Mustermann“) hat wenig Kontrast. | 1.4.3 |
+| Fehlermeldung | Die rote Fehlermeldung wird vom Screenreader nicht angesagt. Sie ist nur rot und klein. | 3.3.1, 4.1.3 |
+| Pflichtfelder | Man sieht vorher nicht, welche Felder Pflicht sind. | 3.3.2 |
+| Autovervollständigung | Name und E-Mail haben kein `autocomplete`. | 1.3.5 |
+
+**Commit:**
+
+**Ergebnis in WAVE (Kontakt-Seite, Ausgangszustand):**
+
+![WAVE-Ergebnis der Kontakt-Seite vor den Verbesserungen](<Bilder/Bildschirmfoto 2026-11-25 um 21.00.01.png>)
+
+*Bild 3: WAVE auf der neuen Kontakt-Seite. Links die Zusammenfassung, rechts die Markierungen im Formular.*
+
+| Was WAVE zählt     | Anzahl |
+|--------------------|-------:|
+| Fehler (Errors)    | **4**  |
+| Kontrast-Fehler    | 3      |
+| Warnungen (Alerts) | 9      |
+| Features           | 1      |
+| Struktur-Elemente  | 2      |
+| ARIA               | 0      |
+| **AIM Score**      | **6,2 von 10 (62 %)** |
+
+Die Vermutungen von oben haben sich bestätigt. Auf dieser Seite gibt es sogar **echte Fehler**. Auf dem Dashboard waren es 0.
+
+**Was WAVE gefunden hat, in einfacher Sprache:**
+
+1. **4 × Feld ohne Beschriftung (Missing form label), Fehler**
+   Bei Name, E-Mail, Nachricht und der Checkbox weiß der Screenreader nicht, wie das Feld heißt. Ein blinder Mensch hört nur „Eingabefeld“ und weiß nicht, was er eintippen soll.
+   *Grund:* Die `<label>` stehen zwar über dem Feld, sind aber nicht mit `for` und `id` verbunden.
+
+2. **4 × Beschriftung ohne Feld (Orphaned form label), Warnung**
+   Das ist dasselbe Problem von der anderen Seite. Die Texte „Name“, „E-Mail“, „Betreff“ und „Nachricht“ gehören zu keinem Feld.
+
+3. **1 × Auswahlfeld ohne Beschriftung (Select missing label), Warnung**
+   Das Auswahlfeld „Betreff“ hat keinen Namen für den Screenreader.
+
+4. **3 × zu wenig Kontrast, Kontrast-Fehler**
+   - Logo „CoinFinder“ in der Seitenleiste
+   - das Wort „NAVIGATION“ (dunkelgrau auf dunkel)
+   - der Knopf **„Nachricht senden“**: weiße Schrift auf Orange (`#f97316`) hat nur etwa **2,8 : 1**. Nötig sind 4,5 : 1.
+
+5. **1 × keine Überschriften-Struktur, Warnung**
+   „Kontakt“ sieht aus wie eine Überschrift, ist aber kein `<h1>`. Das ist wie bei Problem 3.
+
+6. **2 × sehr kleine Schrift, Warnung**
+   In der Seitenleiste („NAVIGATION“ und Verbindungs-Status).
+
+7. **1 × `<noscript>`-Element, Warnung**
+   Wie bei Problem 4.
+
+**Was noch zu tun ist (Plan für das Formular):**
+
+- [ ] Jedes `<label>` mit `for="..."` und das Feld mit der passenden `id="..."` verbinden
+- [ ] Die Checkbox mit dem Text in ein `<label>` packen
+- [ ] Pflichtfelder kennzeichnen (z. B. „*“ und `required`)
+- [ ] Fehlermeldung mit `role="alert"` versehen, damit der Screenreader sie vorliest
+- [ ] `autocomplete="name"` und `autocomplete="email"` ergänzen
+- [ ] Kontrast vom orangen Knopf verbessern (dunkleres Orange oder dunkle Schrift)
+- [ ] „Kontakt“ als `<h1>` auszeichnen
+
+---
+
+### Schritt 2: …
+
+**Datum:**
+**Was war das Problem?**
+**Was habe ich im Code geändert?** (Datei + kurze Beschreibung)
+**Commit:**
+**Ergebnis in WAVE danach:**
+
+<!-- Screenshot nach der Änderung hier einfügen -->
+
+---
+
+## 5. Endergebnis
+
+| | Vorher | Nachher |
+|---|---|---|
+| Kontrast-Fehler | 8 | |
+| Warnungen | 9 | |
+| AIM Score | 6,5 / 10 (65 %) | |

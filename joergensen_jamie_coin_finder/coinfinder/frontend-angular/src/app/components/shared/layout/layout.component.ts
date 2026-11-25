@@ -133,6 +133,9 @@ import { NotificationService } from '../../../services/notification.service';
           <a class="nav-knopf" routerLink="/prices" routerLinkActive="active">
             <span class="nav-symbol">📈</span> Kurse
           </a>
+          <a class="nav-knopf" routerLink="/contact" routerLinkActive="active">
+            <span class="nav-symbol">✉️</span> Kontakt
+          </a>
         </div>
 
         <div class="verbindungs-info">
