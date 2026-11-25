@@ -106,12 +106,14 @@ import { NotificationService } from '../../../services/notification.service';
     }
     .abmelde-knopf:hover { color: var(--rot); }
     .hauptbereich { padding: 24px 28px; overflow-y: auto; }
+    .hauptbereich:focus { outline: none; }
     @media (max-width: 900px) {
       .layout { grid-template-columns: 1fr; }
       .seitenleiste { display: none; }
     }
   `],
   template: `
+    <a class="sprunglink" href="#hauptinhalt" (click)="zumInhalt($event)">Zum Inhalt springen</a>
     <div class="layout">
       <nav class="seitenleiste">
         <div class="nav-logo">
@@ -152,12 +154,12 @@ import { NotificationService } from '../../../services/notification.service';
               <div class="benutzer-name">{{ auth.currentUser.name }}</div>
               <div class="benutzer-rolle">{{ auth.currentUser.role }}</div>
             </div>
-            <button class="abmelde-knopf" (click)="logout()" title="Abmelden">✕</button>
+            <button class="abmelde-knopf" (click)="logout()" title="Abmelden" aria-label="Abmelden"><span aria-hidden="true">✕</span></button>
           </div>
         </div>
       </nav>
 
-      <main class="hauptbereich">
+      <main class="hauptbereich" id="hauptinhalt" tabindex="-1">
         <ng-content></ng-content>
       </main>
     </div>
@@ -172,6 +174,12 @@ export class LayoutComponent implements OnInit, OnDestroy {
     private ws: WebsocketService,
     private ns: NotificationService,
   ) {}
+
+  // Sprunglink: Fokus direkt auf den Hauptinhalt setzen (ohne dass der Router die URL ändert)
+  zumInhalt(event: Event): void {
+    event.preventDefault();
+    document.getElementById('hauptinhalt')?.focus();
+  }
 
   get wsStatusText(): string {
     switch (this.wsStatus) {

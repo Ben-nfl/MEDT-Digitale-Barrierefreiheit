@@ -27,8 +27,11 @@ import { NotificationService } from '../../services/notification.service';
     .suche-eintrag {
       padding: 9px 12px; cursor: pointer; display: flex; align-items: center;
       gap: 9px; font-size: 0.8125rem; transition: background 0.1s;
+      width: 100%; background: transparent; border: none; color: inherit;
+      font-family: inherit; text-align: left;
     }
-    .suche-eintrag:hover { background: rgba(255,255,255,0.04); }
+    .suche-eintrag:hover, .suche-eintrag:focus { background: rgba(255,255,255,0.06); }
+    .suche-eintrag:focus-visible { outline-offset: -3px; }
     .suche-avatar {
       width: 1.75rem; height: 1.75rem; border-radius: 50%; overflow: hidden;
       background: var(--akzent-schwach); display: flex; align-items: center;
@@ -60,16 +63,21 @@ import { NotificationService } from '../../services/notification.service';
             <div class="feld-gruppe suche-container">
               <label class="feld-beschriftung" for="watchlist-suche">Coin suchen</label>
               <input class="feld-input" id="watchlist-suche" autocomplete="off" [(ngModel)]="suchtext" (ngModelChange)="suchen()"
+                     (keydown.arrowdown)="fokusVorschlag(0, $event)" (keydown.escape)="vorschlaegeSchliessen()"
+                     aria-describedby="watchlist-suche-status"
                      placeholder="z.B. Bitcoin, Ethereum..." />
-              <div class="suche-dropdown" *ngIf="suchergebnisse.length > 0">
-                <div class="suche-eintrag" *ngFor="let c of suchergebnisse" (click)="auswaehlen(c)">
+              <span id="watchlist-suche-status" class="sr-only" aria-live="polite">{{ suchergebnisse.length ? suchergebnisse.length + ' Vorschläge gefunden. Mit Pfeil nach unten auswählen.' : '' }}</span>
+              <div class="suche-dropdown" *ngIf="suchergebnisse.length > 0" role="group" aria-label="Vorschläge">
+                <button type="button" class="suche-eintrag" *ngFor="let c of suchergebnisse; let i = index" (click)="auswaehlen(c)"
+                        (keydown.arrowdown)="fokusVorschlag(i + 1, $event)" (keydown.arrowup)="fokusVorschlag(i - 1, $event)"
+                        (keydown.escape)="vorschlaegeSchliessen()">
                   <div class="suche-avatar">
                     <img *ngIf="c.thumb" [src]="c.thumb" alt="" />
                     <span *ngIf="!c.thumb">{{ c.symbol[0] }}</span>
                   </div>
                   <span>{{ c.name }}</span>
                   <span style="color: var(--text-sehr-gedimmt); font-size: 0.75rem;">{{ c.symbol }}</span>
-                </div>
+                </button>
               </div>
             </div>
             <div class="feld-gruppe">
@@ -150,11 +158,27 @@ export class WatchlistComponent implements OnInit {
     }, 400);
   }
 
+  // Tastatur: Pfeil runter/hoch springt zwischen Suchfeld und Vorschlägen
+  fokusVorschlag(index: number, event: Event): void {
+    event.preventDefault();
+    const eintraege = document.querySelectorAll<HTMLElement>('.suche-eintrag');
+    if (index < 0) { document.getElementById('watchlist-suche')?.focus(); return; }
+    eintraege[Math.min(index, eintraege.length - 1)]?.focus();
+  }
+
+  // Escape schließt die Vorschläge und setzt den Fokus zurück ins Suchfeld
+  vorschlaegeSchliessen(): void {
+    this.suchergebnisse = [];
+    document.getElementById('watchlist-suche')?.focus();
+  }
+
   auswaehlen(coin: any): void {
     this.neuesSymbol = coin.id;
     this.neuerName = coin.name;
     this.suchtext = coin.name;
     this.suchergebnisse = [];
+    // nach der Auswahl weiter zum nächsten Feld, damit der Fokus nicht verloren geht
+    setTimeout(() => document.getElementById('watchlist-name')?.focus());
   }
 
   hinzufuegen(): void {

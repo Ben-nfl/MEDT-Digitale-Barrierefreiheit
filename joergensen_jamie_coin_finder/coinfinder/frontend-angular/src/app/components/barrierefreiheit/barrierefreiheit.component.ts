@@ -87,15 +87,6 @@ import { AuthService } from '../../services/auth.service';
               (1.4.10 Umbruch)
             </li>
             <li>
-              <strong>Tastatur-Bedienung:</strong> Die Vorschlagsliste der Coin-Suche in der Watchlist kann man
-              nicht mit der Tastatur auswählen. Als Alternative kann man Symbol und Name direkt in die Felder
-              darunter eintippen. (2.1.1 Tastatur)
-            </li>
-            <li>
-              <strong>Abmelde-Knopf:</strong> Der Knopf zum Abmelden zeigt nur das Zeichen „✕“ und hat keinen
-              eindeutigen Namen für Screenreader. (4.1.2 Name, Rolle, Wert)
-            </li>
-            <li>
               <strong>Gewinn und Verlust:</strong> Steigende und fallende Kurse werden teilweise nur durch die
               Farben Grün und Rot unterschieden. (1.4.1 Benutzung von Farbe)
             </li>
@@ -126,7 +117,7 @@ import { AuthService } from '../../services/auth.service';
           <p>
             Die Bewertung ist eine <strong>Selbstbewertung</strong>. Geprüft wurde mit dem Werkzeug
             WAVE (WebAIM) und von Hand: Kontrastwerte nachgerechnet, Bedienung mit 200 % Zoom getestet,
-            Überschriften und Formular-Beschriftungen kontrolliert.
+            Überschriften und Formular-Beschriftungen kontrolliert, alle Seiten nur mit der Tastatur bedient.
           </p>
           <p>
             Ergebnis von WAVE auf Dashboard und Kontakt-Seite: 0 Fehler, 0 Kontrast-Fehler,

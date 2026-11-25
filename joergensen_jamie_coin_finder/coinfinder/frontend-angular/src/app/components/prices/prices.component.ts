@@ -51,11 +51,11 @@ declare const Chart: any;
           </div>
           <div style="display:flex; gap: 8px; flex-wrap: wrap">
             <div class="tabs">
-              <button *ngFor="let c of watchlist" [class.aktiv]="ausgewaehlteCoin === c.symbol"
+              <button *ngFor="let c of watchlist" [class.aktiv]="ausgewaehlteCoin === c.symbol" [attr.aria-pressed]="ausgewaehlteCoin === c.symbol"
                       (click)="waehleCoin(c.symbol)">{{ c.name }}</button>
             </div>
             <div class="tabs">
-              <button *ngFor="let d of [7,14,30]" [class.aktiv]="ausgewaehlteZeit === d"
+              <button *ngFor="let d of [7,14,30]" [class.aktiv]="ausgewaehlteZeit === d" [attr.aria-pressed]="ausgewaehlteZeit === d" [attr.aria-label]="d + ' Tage'"
                       (click)="waehleZeit(d)">{{ d }}T</button>
             </div>
           </div>

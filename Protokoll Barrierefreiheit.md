@@ -125,9 +125,9 @@ Diese Punkte gehören auch zu WCAG 2.2 AA und sollen geprüft werden:
 - [ ] Navigation bei 200 % Zoom / schmalem Bildschirm anzeigen (neu gefunden in Schritt 3)
 - [x] Überschriften-Struktur einbauen (Problem 3) → Schritt 5
 - [x] `<noscript>`-Hinweis prüfen (Problem 4) → Schritt 5
-- [ ] Abmelde-Knopf beschriften
+- [x] Abmelde-Knopf beschriften → Schritt 8
 - [ ] Gewinn/Verlust nicht nur über Farbe zeigen
-- [ ] Tastatur-Bedienung und Fokus prüfen
+- [x] Tastatur-Bedienung und Fokus prüfen → Schritt 8
 - [ ] Live-Kurse für Screenreader ansagen
 - [x] Unterseite „Barrierefreiheitserklärung“ erstellen und verlinken → Schritt 6
 - [ ] Alle Seiten erneut mit WAVE prüfen (Login, Dashboard, Watchlist, Alarme, Kurse, Kontakt)
@@ -661,7 +661,130 @@ Die Erklärung folgt der EU-Mustererklärung (Durchführungsbeschluss (EU) 2018/
 
 ---
 
-### Schritt 7: …
+### Schritt 7: Navigation bei 200 % Zoom (zurückgestellt)
+
+Dieser Schritt wurde vorerst übersprungen. Das Problem (Seitenleiste verschwindet bei 200 % Zoom, siehe Schritt 3) bleibt offen und steht weiter in der Barrierefreiheitserklärung.
+
+---
+
+### Schritt 8: Tastatur-Bedienung
+
+**Datum:** 25.11.2026
+**Hinweis:** Dieser Schritt wurde mit KI-Unterstützung (Claude Code) umgesetzt.
+
+**Wie habe ich getestet?**
+Ich habe die App nur mit der Tastatur bedient: `Tab` zum nächsten Element, `Enter` zum Auslösen, Pfeiltasten und `Escape`. Dabei habe ich bei jedem Schritt notiert, welches Element den Fokus hat und ob man das sieht.
+
+**Was war das Problem?**
+
+| Problem | Was passiert ist | WCAG-Kriterium |
+|---------|------------------|----------------|
+| Fokus-Rahmen schwach | Links und Knöpfe hatten nur den dünnen Standard-Rahmen von Chrome (1 px blau `#005fcc`, 2,8 : 1 auf der Karte). Bei den **Eingabefeldern** war der Rahmen mit `outline: none` ganz abgeschaltet. Man sah nur, dass die 1 px dünne Umrandung orange wird. | 2.4.7 Fokus sichtbar, 1.4.11 Nicht-Text-Kontrast |
+| Kein Sprunglink | Auf jeder Seite musste man **7-mal Tab** drücken (alle Menüpunkte und Abmelden), bevor man zum Inhalt kam. | 2.4.1 Blöcke umgehen |
+| Coin-Vorschläge nicht bedienbar | In der Watchlist-Suche waren die Vorschläge `<div>`-Elemente mit Klick. Tab landete auf der ganzen Liste, Enter und Pfeiltasten taten nichts. Man konnte keinen Vorschlag auswählen. | 2.1.1 Tastatur, 4.1.2 Name, Rolle, Wert |
+| Abmelde-Knopf ohne Namen | Der Knopf hieß für den Screenreader nur „✕“ („Multiplikationszeichen“). | 4.1.2 Name, Rolle, Wert |
+| Zeitraum- und Coin-Knöpfe auf der Kurse-Seite | Welcher Knopf gerade aktiv ist, war nur an der Farbe zu erkennen. „7T“ ist für einen Screenreader unverständlich. | 4.1.2, 1.3.1 |
+
+**Was habe ich im Code geändert?**
+
+1. **Deutlicher Fokus-Rahmen** (`styles.css`): Alle bedienbaren Elemente haben bei Tastatur-Bedienung einen **3 px dicken orangen Rahmen** (`#fb923c`, **7,4 : 1**) mit etwas Abstand. Er gilt auch für Eingabefelder. Er erscheint nur bei Tastatur-Bedienung (`:focus-visible`), nicht beim Klicken mit der Maus.
+   ```css
+   :focus-visible { outline: 3px solid var(--akzent-hell); outline-offset: 2px; }
+   ```
+2. **Sprunglink „Zum Inhalt springen“** (`layout.component.ts`, `styles.css`): Das ist der erste Link auf jeder Seite. Er ist unsichtbar, bis man Tab drückt. Mit Enter springt der Fokus direkt in den Hauptbereich (`<main id="hauptinhalt" tabindex="-1">`). Weil Angular einen normalen `#`-Link als neue Route versteht, setzt eine kleine Funktion `zumInhalt()` den Fokus selbst.
+3. **Coin-Vorschläge als echte Knöpfe** (`watchlist.component.ts`):
+   - Jeder Vorschlag ist jetzt ein `<button>` statt `<div>`. Man erreicht ihn mit Tab und löst ihn mit Enter aus.
+   - **Pfeil runter** im Suchfeld springt zum ersten Vorschlag, Pfeil hoch/runter wechselt zwischen den Vorschlägen.
+   - **Escape** schließt die Liste und setzt den Fokus zurück ins Suchfeld.
+   - Nach der Auswahl springt der Fokus weiter zum Feld „Name“, damit man nicht wieder von oben anfangen muss.
+   - Ein unsichtbarer Hinweis für Screenreader (`aria-live="polite"`) sagt: „8 Vorschläge gefunden. Mit Pfeil nach unten auswählen.“
+4. **Abmelde-Knopf** (`layout.component.ts`): Er hat jetzt `aria-label="Abmelden"`, das „✕“ ist mit `aria-hidden="true"` versteckt.
+5. **Knöpfe auf der Kurse-Seite** (`prices.component.ts`): `aria-pressed="true/false"` sagt dem Screenreader, welcher Coin und welcher Zeitraum gerade gewählt ist. „7T“ wird als „7 Tage“ vorgelesen (`aria-label`).
+6. **Barrierefreiheitserklärung aktualisiert:** Die Punkte „Tastatur-Bedienung“ und „Abmelde-Knopf“ sind aus der Liste der nicht barrierefreien Inhalte gestrichen.
+
+**Geänderte Dateien:**
+
+| Datei | Änderung |
+|-------|----------|
+| `frontend-angular/src/styles.css` | Fokus-Rahmen `:focus-visible`, Stil für den Sprunglink |
+| `.../shared/layout/layout.component.ts` | Sprunglink, `<main id="hauptinhalt">`, Funktion `zumInhalt()`, Abmelde-Knopf mit `aria-label` |
+| `.../watchlist/watchlist.component.ts` | Vorschläge als `<button>`, Pfeiltasten und Escape, Fokus nach Auswahl, Hinweis für Screenreader |
+| `.../prices/prices.component.ts` | `aria-pressed` und `aria-label` für die Coin- und Zeitraum-Knöpfe |
+| `.../barrierefreiheit/barrierefreiheit.component.ts` | zwei behobene Punkte aus der Liste entfernt |
+
+**Überprüfung mit der Tastatur (nachher):**
+
+| Aktion | Ergebnis |
+|--------|----------|
+| 1 × Tab auf jeder Seite | „Zum Inhalt springen“ erscheint oben links, orange umrandet |
+| Enter auf dem Sprunglink | Fokus springt in den Hauptbereich (`#hauptinhalt`) |
+| Tab durch die Seitenleiste | Jeder Menüpunkt und „Abmelden“ hat einen 3 px orangen Rahmen |
+| Abmelde-Knopf | wird als „Abmelden“ erkannt |
+| Watchlist: „bitc“ tippen | Hinweis: „8 Vorschläge gefunden. Mit Pfeil nach unten auswählen.“ |
+| 2 × Pfeil runter, Enter | „Bitcoin Cash“ wird übernommen (Symbol `bitcoin-cash`), Fokus springt ins Feld „Name“ |
+
+**Commit:**
+
+**Vorher / Nachher im Browser:**
+
+![Fokus vorher](<Bilder/Schritt8 Tastatur vorher - dashboard Fokus.png>)
+
+*Bild 32: Vorher. Der Fokus auf „Alarme“ ist nur ein dünner blauer Standard-Rahmen.*
+
+![Fokus nachher](<Bilder/Schritt8 Tastatur nachher - dashboard Fokus.png>)
+
+*Bild 33: Nachher. Der Fokus auf „Alarme“ ist ein deutlicher, 3 px dicker oranger Rahmen.*
+
+![Sprunglink](<Bilder/Schritt8 Tastatur nachher - dashboard Sprunglink.png>)
+
+*Bild 34: Nach dem ersten Tab erscheint oben links der Sprunglink „Zum Inhalt springen“.*
+
+![Watchlist-Suche vorher](<Bilder/Schritt8 Tastatur vorher - watchlist Suche.png>)
+
+*Bild 35: Vorher. Nach dem Tippen von „bitc“ erscheinen die Vorschläge, aber man kann sie mit der Tastatur nicht erreichen.*
+
+![Watchlist-Suche nachher](<Bilder/Schritt8 Tastatur nachher - watchlist Suche.png>)
+
+*Bild 36: Nachher. Mit Pfeil runter ist der erste Vorschlag „Bitcoin“ fokussiert (oranger Rahmen) und kann mit Enter gewählt werden.*
+
+**Ergebnis in WAVE danach:**
+
+![WAVE-Zusammenfassung Dashboard nach Schritt 8](<Bilder/Bildschirmfoto 2026-11-25 um 22.03.43.png>)
+
+*Bild 37: WAVE auf dem Dashboard nach Schritt 8. 0 Fehler, AIM Score 10 von 10.*
+
+![Dashboard mit WAVE-Markierungen nach Schritt 8](<Bilder/Bildschirmfoto 2026-11-25 um 22.03.46.png>)
+
+*Bild 38: Das Dashboard mit den WAVE-Markierungen. Unten zeigt WAVE das `tabindex="-1"` am Hauptbereich (Ziel des Sprunglinks), in der Seitenleiste das versteckte ♿-Symbol.*
+
+![WAVE-Zusammenfassung Watchlist nach Schritt 8](<Bilder/Bildschirmfoto 2026-11-25 um 22.04.03.png>)
+
+*Bild 39: WAVE auf der Watchlist nach Schritt 8. 0 Fehler, AIM Score 10 von 10, 3 richtig beschriftete Formularfelder.*
+
+![Watchlist mit WAVE-Markierungen nach Schritt 8](<Bilder/Bildschirmfoto 2026-11-25 um 22.04.07.png>)
+
+*Bild 40: Die Watchlist mit den WAVE-Markierungen. Beim Suchfeld sieht man `aria-describedby` und das Lautsprecher-Symbol für den `aria-live`-Hinweis „… Vorschläge gefunden“.*
+
+| Was WAVE zählt | Dashboard nach Schritt 8 | Watchlist nach Schritt 8 |
+|----------------|-------------------------:|-------------------------:|
+| Fehler | 0 | 0 |
+| Kontrast-Fehler | 0 | 0 |
+| Warnungen | 1 | 1 |
+| Features | 1 | 4 |
+| Struktur | 13 | 9 |
+| ARIA | 4 | 10 |
+| AIM Score | **10 (100 %)** | **10 (100 %)** |
+
+**Was das bedeutet:**
+
+- Die Änderungen aus Schritt 8 haben **keine neuen Fehler** gebracht. Beide Seiten bleiben bei 10 von 10.
+- Unter **ARIA** sieht man die neuen Hilfen für Screenreader: `aria-label` beim Abmelde-Knopf, `aria-describedby` und `aria-live` bei der Coin-Suche, `aria-hidden` bei den Symbolen und `tabindex="-1"` als Ziel des Sprunglinks.
+- Den Sprunglink selbst zeigt WAVE nicht als eigenes Merkmal an. Dass er funktioniert, habe ich mit der Tastatur getestet (siehe Tabelle „Überprüfung mit der Tastatur“ und Bild 34).
+- **Wichtig:** Ob man eine Seite mit der Tastatur bedienen kann und ob der Fokus gut sichtbar ist, kann WAVE nicht automatisch prüfen. Darum war der eigene Tastatur-Test in diesem Schritt nötig.
+
+---
+
+### Schritt 9: …
 
 **Datum:**
 **Was war das Problem?**
@@ -684,4 +807,5 @@ Die Erklärung folgt der EU-Mustererklärung (Durchführungsbeschluss (EU) 2018/
 
 Das Ziel von mindestens 90 % ohne kritische Fehler ist auf allen geprüften Seiten erreicht. Die Barrierefreiheitserklärung ist als eigene Unterseite eingebaut und von der Startseite verlinkt.
 Die Warnung `<noscript>` ist geprüft und beabsichtigt.
-Offen sind noch: „No page regions“ auf der Login-Seite, Navigation bei 200 % Zoom, Tastatur-Bedienung, Abmelde-Knopf, Gewinn/Verlust nicht nur über Farbe, Live-Kurse für Screenreader.
+Erledigt in Schritt 8: Tastatur-Bedienung, Fokus-Rahmen, Sprunglink, Abmelde-Knopf.
+Offen sind noch: „No page regions“ auf der Login-Seite, Navigation bei 200 % Zoom (Schritt 7, zurückgestellt), Gewinn/Verlust nicht nur über Farbe, Live-Kurse für Screenreader.
