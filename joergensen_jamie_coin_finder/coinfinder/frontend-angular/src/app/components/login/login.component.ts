@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   styles: [`
     .seite {
       display: flex; align-items: center; justify-content: center;
@@ -29,6 +29,9 @@ import { AuthService } from '../../services/auth.service';
     }
     .logo-text { font-size: 1.375rem; font-weight: 700; letter-spacing: -0.5px; }
     .logo-text span { color: var(--akzent); }
+    .bf-link { margin-top: 18px; text-align: center; font-size: 0.875rem; }
+    .bf-link a { color: var(--akzent-hell); text-decoration: underline; text-underline-offset: 3px; }
+    .bf-link a:hover { color: var(--text); }
     h1 { font-size: 1.125rem; font-weight: 600; margin-bottom: 4px; }
     .unter { font-size: 0.8125rem; color: var(--text-gedimmt); margin-bottom: 24px; }
     .hinweis {
@@ -80,6 +83,10 @@ import { AuthService } from '../../services/auth.service';
         <button class="haupt-knopf" (click)="login()" [disabled]="loading">
           {{ loading ? 'Einloggen...' : 'Einloggen' }}
         </button>
+
+        <p class="bf-link">
+          <a routerLink="/barrierefreiheit">Erklärung zur Barrierefreiheit</a>
+        </p>
       </div>
     </div>
   `

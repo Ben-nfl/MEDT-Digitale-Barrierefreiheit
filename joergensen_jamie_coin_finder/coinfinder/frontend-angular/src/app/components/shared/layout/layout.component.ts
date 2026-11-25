@@ -136,6 +136,9 @@ import { NotificationService } from '../../../services/notification.service';
           <a class="nav-knopf" routerLink="/contact" routerLinkActive="active">
             <span class="nav-symbol">✉️</span> Kontakt
           </a>
+          <a class="nav-knopf" routerLink="/barrierefreiheit" routerLinkActive="active">
+            <span class="nav-symbol" aria-hidden="true">♿</span> Barrierefreiheit
+          </a>
         </div>
 
         <div class="verbindungs-info">

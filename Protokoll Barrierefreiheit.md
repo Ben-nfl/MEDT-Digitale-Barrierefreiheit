@@ -129,7 +129,7 @@ Diese Punkte gehören auch zu WCAG 2.2 AA und sollen geprüft werden:
 - [ ] Gewinn/Verlust nicht nur über Farbe zeigen
 - [ ] Tastatur-Bedienung und Fokus prüfen
 - [ ] Live-Kurse für Screenreader ansagen
-- [ ] Unterseite „Barrierefreiheitserklärung“ erstellen und verlinken
+- [x] Unterseite „Barrierefreiheitserklärung“ erstellen und verlinken → Schritt 6
 - [ ] Alle Seiten erneut mit WAVE prüfen (Login, Dashboard, Watchlist, Alarme, Kurse, Kontakt)
 
 ---
@@ -557,7 +557,111 @@ WAVE meldet `<noscript>` trotzdem weiter als **Warnung**. Das ist kein Fehler: W
 
 ---
 
-### Schritt 6: …
+### Schritt 6: Barrierefreiheitserklärung als eigene Unterseite
+
+**Datum:** 25.11.2026
+**Hinweis:** Der Text der Erklärung wurde mit KI-Unterstützung (Claude Code) formuliert. Das ist laut Aufgabenstellung erlaubt. Der Code der Unterseite wurde ebenfalls mit KI-Unterstützung umgesetzt.
+
+**Was war das Problem?**
+Die App hatte **keine Barrierefreiheitserklärung**. Die Aufgabenstellung verlangt eine eigene Unterseite, die über einen **gut sichtbaren Link direkt von der Startseite** erreichbar ist. Auch das österreichische Web-Zugänglichkeits-Gesetz (§ 4 WZG) verlangt für öffentliche Stellen, dass die Erklärung über die Startseite erreichbar ist.
+
+**Aufbau der Erklärung**
+Die Erklärung folgt der EU-Mustererklärung (Durchführungsbeschluss (EU) 2018/1523) und dem Muster der FFG. Sie enthält alle Pflichtinhalte aus meiner Recherche:
+
+| Pflichtinhalt | Was in der Erklärung steht |
+|---------------|----------------------------|
+| Geltungsbereich | Web-App CoinFinder, Schulprojekt MEDT. Freiwillige Erklärung, weil CoinFinder keine öffentliche Stelle ist |
+| Stand der Vereinbarkeit | **teilweise vereinbar** mit WCAG 2.2 AA |
+| Nicht barrierefreie Inhalte | Navigation bei 200 % Zoom, Coin-Vorschläge per Tastatur, Abmelde-Knopf, Gewinn/Verlust nur über Farbe, Live-Kurse, Kurs-Diagramm ohne Textalternative; Inhalte Dritter (CoinGecko). Jeweils mit WCAG-Kriterium und, wo möglich, mit Alternative |
+| Erstellung | 25.11.2026, Selbstbewertung mit WAVE und manueller Prüfung |
+| Feedback und Kontakt | Link zum Kontaktformular (Betreff „Fehler melden“) |
+| Durchsetzungsverfahren | FFG als Beschwerdestelle des Bundes (§ 5 WZG), Sensengasse 1, 1090 Wien; Link zu digitalbarrierefrei.at mit allen Beschwerdestellen |
+| freiwillig: Technik | HTML, CSS, TypeScript (Angular 17); getestet mit Chrome und WAVE |
+
+**Warum „teilweise vereinbar“ und nicht „vollständig“?** WAVE zeigt zwar 10 von 10, aber WAVE prüft nur einen Teil der WCAG-Kriterien automatisch. Bei meinen eigenen Tests habe ich noch Barrieren gefunden (siehe oben). Eine ehrliche Erklärung muss diese nennen. Sobald ich sie behebe, aktualisiere ich die Erklärung.
+
+**Was habe ich im Code geändert?**
+
+1. **Neue Unterseite** `/barrierefreiheit` (neue Komponente `BarrierefreiheitComponent`):
+   - Die Seite ist **ohne Anmeldung** erreichbar, weil sie öffentlich sein muss.
+   - Sie ist selbst barrierefrei: eine `<h1>`, je Abschnitt eine `<h2>` (Unterpunkte `<h3>`), echte Listen (`<ul>`), Abschnitte als `<section>` mit `aria-labelledby`, ein `<main>`-Bereich, unterstrichene Links und Kontrast über 4,5 : 1.
+   - Sie hat einen eigenen Seitentitel im Browser-Tab: „Erklärung zur Barrierefreiheit – CoinFinder“ (WCAG 2.4.2).
+   - Oben steht ein Link „← Zurück zu CoinFinder“: angemeldet führt er zum Dashboard, sonst zum Login.
+   - Der externe Link zu digitalbarrierefrei.at hat einen versteckten Hinweis „(öffnet in neuem Fenster)“ für Screenreader. Dafür gibt es die neue Hilfsklasse `.sr-only` in `styles.css`.
+2. **Gut sichtbare Links von der Startseite:**
+   - **Login-Seite** (Startseite für alle, die nicht angemeldet sind): unter dem Knopf „Einloggen“ der orange, unterstrichene Link „Erklärung zur Barrierefreiheit“.
+   - **Seitenleiste** (auf dem Dashboard, der Startseite nach dem Login, und auf allen anderen Seiten): neuer Menüpunkt „♿ Barrierefreiheit“ direkt unter „Kontakt“.
+3. **Kontaktformular ohne Anmeldung:** Die Route `/contact` braucht keine Anmeldung mehr. Wer eine Barriere melden will, braucht dafür kein Konto. Sonst wäre der Feedback-Weg selbst eine Barriere.
+
+**Geänderte Dateien:**
+
+| Datei | Änderung |
+|-------|----------|
+| `.../components/barrierefreiheit/barrierefreiheit.component.ts` | **neu:** die Seite mit der Erklärung |
+| `frontend-angular/src/app/app.routes.ts` | neue öffentliche Route `/barrierefreiheit` mit Seitentitel; `/contact` ohne Anmeldung |
+| `.../components/login/login.component.ts` | Link „Erklärung zur Barrierefreiheit“ unter dem Login-Knopf |
+| `.../components/shared/layout/layout.component.ts` | Menüpunkt „Barrierefreiheit“ in der Seitenleiste |
+| `frontend-angular/src/styles.css` | Hilfsklasse `.sr-only` (Text nur für Screenreader) |
+
+**Überprüfung:** Ohne Anmeldung habe ich Login, Erklärung und Kontakt geöffnet. Alle drei Seiten öffnen sich, und es gibt keinen Text unter 4,5 : 1. Die Erklärung hat die Gliederung `h1` → 7 × `h2` → 2 × `h3`.
+
+**Commit:**
+
+**Vorher / Nachher im Browser:**
+
+![Login vorher](<Bilder/Schritt6 Erklärung vorher - login.png>)
+
+*Bild 24: Login-Seite vorher. Es gibt keinen Link zu einer Barrierefreiheitserklärung.*
+
+![Login nachher](<Bilder/Schritt6 Erklärung nachher - login ohne Anmeldung.png>)
+
+*Bild 25: Login-Seite nachher. Unter dem Knopf steht der Link „Erklärung zur Barrierefreiheit“.*
+
+![Dashboard nachher](<Bilder/Schritt6 Erklärung nachher - dashboard.png>)
+
+*Bild 26: Dashboard nachher. In der Seitenleiste ist der neue Menüpunkt „Barrierefreiheit“.*
+
+![Die neue Seite Erklärung zur Barrierefreiheit](<Bilder/Schritt6 Erklärung nachher - barrierefreiheit ohne Anmeldung.png>)
+
+*Bild 27: Die neue Unterseite „Erklärung zur Barrierefreiheit“, ohne Anmeldung geöffnet.*
+
+**Ergebnis in WAVE danach:**
+
+![WAVE-Zusammenfassung der Erklärungs-Seite](<Bilder/Bildschirmfoto 2026-11-25 um 21.53.02.png>)
+
+*Bild 28: WAVE auf der Seite „Erklärung zur Barrierefreiheit“. 0 Fehler, AIM Score 10 von 10. WAVE erkennt 1 × h1, 7 × h2, 2 × h3, 3 Listen und den Hauptbereich.*
+
+![Erklärungs-Seite mit WAVE-Markierungen](<Bilder/Bildschirmfoto 2026-11-25 um 21.53.06.png>)
+
+*Bild 29: Die Erklärungs-Seite mit den WAVE-Markierungen. Die violetten Symbole zeigen die Abschnitte, die mit `aria-labelledby` nach ihrer Überschrift benannt sind.*
+
+![WAVE-Zusammenfassung der Login-Seite](<Bilder/Bildschirmfoto 2026-11-25 um 21.53.57.png>)
+
+*Bild 30: WAVE auf der Login-Seite. 0 Fehler, AIM Score 10 von 10, 2 Warnungen.*
+
+![Login-Seite mit WAVE-Markierungen](<Bilder/Bildschirmfoto 2026-11-25 um 21.54.00.png>)
+
+*Bild 31: Die Login-Seite mit den WAVE-Markierungen. Die beiden Felder sind richtig beschriftet („Form label“), der Link zur Erklärung ist unter dem Knopf.*
+
+| Was WAVE zählt | Erklärung (`/barrierefreiheit`) | Login |
+|----------------|--------------------------------:|------:|
+| Fehler | 0 | 0 |
+| Kontrast-Fehler | 0 | 0 |
+| Warnungen | 1 | 2 |
+| Features | 1 | 3 |
+| Struktur | 14 | 1 |
+| ARIA | 7 | 0 |
+| AIM Score | **10 (100 %)** | **10 (100 %)** |
+
+**Was das bedeutet:**
+
+- Die **Erklärung** ist selbst barrierefrei: keine Fehler, saubere Gliederung. Die **7 × „ARIA label“** sind die 7 Abschnitte (`<section aria-labelledby="...">`). So weiß ein Screenreader, wie jeder Abschnitt heißt. Die einzige Warnung ist wieder das beabsichtigte `<noscript>`.
+- Die **Login-Seite** hat keine Fehler. Die 2 Formularfelder sind richtig beschriftet (aus Schritt 4).
+- **Neue Warnung auf der Login-Seite: „No page regions“.** Die Login-Seite hat keinen Seitenbereich wie `<main>` oder `<nav>`. Screenreader-Nutzer können dann nicht direkt zum Hauptinhalt springen (WCAG 1.3.1). Auf den anderen Seiten gibt es diese Bereiche schon aus dem Layout. Das ist schnell zu beheben: Der äußere Rahmen der Login-Seite muss ein `<main>` werden.
+
+---
+
+### Schritt 7: …
 
 **Datum:**
 **Was war das Problem?**
@@ -569,14 +673,15 @@ WAVE meldet `<noscript>` trotzdem weiter als **Warnung**. Das ist kein Fehler: W
 
 ## 5. Endergebnis
 
-**Zwischenstand nach Schritt 5 (25.11.2026):**
+**Zwischenstand nach Schritt 6 (25.11.2026):**
 
-| | Dashboard vorher | Dashboard jetzt | Kontakt vorher | Kontakt jetzt |
-|---|---:|---:|---:|---:|
-| Fehler | 0 | 0 | 4 | **0** |
-| Kontrast-Fehler | 8 | **0** | 3 | **0** |
-| Warnungen | 9 | **1** | 9 | **1** |
-| AIM Score | 6,5 / 10 (65 %) | **10 / 10 (100 %)** | 6,2 / 10 (62 %) | **10 / 10 (100 %)** |
+| Seite | Fehler vorher | Fehler jetzt | Kontrast-Fehler vorher | Kontrast-Fehler jetzt | Warnungen vorher | Warnungen jetzt | AIM Score vorher | AIM Score jetzt |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Dashboard | 0 | 0 | 8 | **0** | 9 | **1** | 6,5 (65 %) | **10 (100 %)** |
+| Kontakt | 4 | **0** | 3 | **0** | 9 | **1** | 6,2 (62 %) | **10 (100 %)** |
+| Erklärung (neu) | – | 0 | – | 0 | – | 1 | – | **10 (100 %)** |
+| Login | – | 0 | – | 0 | – | 2 | – | **10 (100 %)** |
 
-Das Ziel von mindestens 90 % ohne kritische Fehler ist auf beiden geprüften Seiten erreicht. Die eine verbleibende Warnung (`<noscript>`) ist geprüft und beabsichtigt.
-Offen sind noch: Navigation bei 200 % Zoom, Tastatur-Bedienung, Live-Kurse für Screenreader, Gewinn/Verlust nicht nur über Farbe, Abmelde-Knopf und die Barrierefreiheitserklärung.
+Das Ziel von mindestens 90 % ohne kritische Fehler ist auf allen geprüften Seiten erreicht. Die Barrierefreiheitserklärung ist als eigene Unterseite eingebaut und von der Startseite verlinkt.
+Die Warnung `<noscript>` ist geprüft und beabsichtigt.
+Offen sind noch: „No page regions“ auf der Login-Seite, Navigation bei 200 % Zoom, Tastatur-Bedienung, Abmelde-Knopf, Gewinn/Verlust nicht nur über Farbe, Live-Kurse für Screenreader.
