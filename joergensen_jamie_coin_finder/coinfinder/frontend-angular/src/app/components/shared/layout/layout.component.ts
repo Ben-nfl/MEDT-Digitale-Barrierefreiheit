@@ -40,7 +40,7 @@ import { NotificationService } from '../../../services/notification.service';
       background: var(--akzent);
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 15px; flex-shrink: 0;
+      font-size: 15px; flex-shrink: 0; color: var(--hintergrund);
     }
     .logo-name { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
     .logo-name span { color: var(--akzent); }
@@ -93,7 +93,7 @@ import { NotificationService } from '../../../services/notification.service';
       width: 28px; height: 28px; border-radius: 50%;
       background: linear-gradient(135deg, var(--akzent), #fbbf24);
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; color: white; font-weight: 600; flex-shrink: 0;
+      font-size: 11px; color: var(--hintergrund); font-weight: 600; flex-shrink: 0;
     }
     .benutzer-daten { flex: 1; min-width: 0; }
     .benutzer-name  { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

@@ -186,8 +186,8 @@ export class PricesComponent implements OnInit, OnDestroy, AfterViewInit {
         responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          x: { ticks: { color: '#4a4e66', maxTicksLimit: 7 }, grid: { color: 'rgba(255,255,255,0.04)' } },
-          y: { ticks: { color: '#4a4e66', callback: (v: number) => '$' + v.toLocaleString() }, grid: { color: 'rgba(255,255,255,0.06)' } }
+          x: { ticks: { color: '#8a8fa8', maxTicksLimit: 7 }, grid: { color: 'rgba(255,255,255,0.04)' } },
+          y: { ticks: { color: '#8a8fa8', callback: (v: number) => '$' + v.toLocaleString() }, grid: { color: 'rgba(255,255,255,0.06)' } }
         }
       }
     });

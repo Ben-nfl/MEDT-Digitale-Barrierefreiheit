@@ -12,14 +12,14 @@
   --rand:              #2a2d3e;
   --rand-hell:         #363a52;
   --text:              #e8e9f0;
-  --text-gedimmt:      #8a8fa8;
-  --text-sehr-gedimmt: #4a4e66;
+  --text-gedimmt:      #a3a8bf;  /* vorher #8a8fa8, heller für mehr Kontrast */
+  --text-sehr-gedimmt: #8a8fa8;  /* vorher #4a4e66 (nur 2,1 : 1), jetzt 5,3 : 1 */
   --akzent:            #f97316;
   --akzent-hell:       #fb923c;
   --akzent-schwach:    rgba(249, 115, 22, 0.12);
   --gruen:             #22c55e;
   --gruen-schwach:     rgba(34, 197, 94, 0.1);
-  --rot:               #ef4444;
+  --rot:               #f87171;  /* vorher #ef4444 (4,47 : 1), jetzt 6,1 : 1 */
   --rot-schwach:       rgba(239, 68, 68, 0.1);
   --blau:              #3b82f6;
   --ecke:              12px;
@@ -79,7 +79,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
 .haupt-knopf {
   background: var(--akzent);
-  color: white;
+  color: var(--hintergrund);  /* dunkle Schrift: weiß auf Orange hatte nur 2,8 : 1 */
   border: none;
   padding: 10px 16px;
   border-radius: var(--ecke-klein);
@@ -156,6 +156,9 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   box-shadow: 0 0 0 3px var(--akzent-schwach);
 }
 .feld-select option { background: var(--karte); }
+
+/* Platzhalter-Text: Chrome-Standard (#757575) hatte nur 3,3 : 1, jetzt 4,7 : 1 */
+::placeholder { color: var(--text-sehr-gedimmt); opacity: 1; }
 
 /* Benachrichtigungen */
 @keyframes einblenden {

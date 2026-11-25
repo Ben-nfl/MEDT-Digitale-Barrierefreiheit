@@ -25,7 +25,7 @@ import { AuthService } from '../../services/auth.service';
     .logo-icon {
       width: 36px; height: 36px; background: var(--akzent);
       border-radius: 10px; display: flex; align-items: center;
-      justify-content: center; font-size: 18px;
+      justify-content: center; font-size: 18px; color: var(--hintergrund);
     }
     .logo-text { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
     .logo-text span { color: var(--akzent); }

@@ -120,7 +120,7 @@ Diese Punkte gehören auch zu WCAG 2.2 AA und sollen geprüft werden:
 
 ## 3. Plan: Was ich verbessern will
 
-- [ ] Kontrast-Farben in `styles.css` anpassen (Problem 1)
+- [x] Kontrast-Farben in `styles.css` anpassen (Problem 1) → Schritt 2
 - [ ] Schriftgrößen vergrößern und auf `rem` umstellen (Problem 2)
 - [ ] Überschriften-Struktur einbauen (Problem 3)
 - [ ] `<noscript>`-Hinweis prüfen (Problem 4)
@@ -225,20 +225,83 @@ Die Vermutungen von oben haben sich bestätigt. Auf dieser Seite gibt es sogar *
 - [ ] Pflichtfelder kennzeichnen (z. B. „*“ und `required`)
 - [ ] Fehlermeldung mit `role="alert"` versehen, damit der Screenreader sie vorliest
 - [ ] `autocomplete="name"` und `autocomplete="email"` ergänzen
-- [ ] Kontrast vom orangen Knopf verbessern (dunkleres Orange oder dunkle Schrift)
+- [x] Kontrast vom orangen Knopf verbessern (dunkleres Orange oder dunkle Schrift) → Schritt 2
 - [ ] „Kontakt“ als `<h1>` auszeichnen
 
 ---
 
-### Schritt 2: …
+### Schritt 2: Kontrast verbessern
+
+**Datum:** 25.11.2026
+**Hinweis:** Dieser Schritt wurde mit KI-Unterstützung (Claude Code) umgesetzt.
+
+**Was war das Problem?**
+WAVE hat auf dem Dashboard 8 und auf der Kontakt-Seite 3 Kontrast-Fehler gefunden (WCAG 2.2 AA, Kriterium **1.4.3 Kontrast (Minimum)**). Normaler Text braucht mindestens **4,5 : 1**.
+Die Ursachen waren wenige Farben, die an vielen Stellen benutzt werden:
+
+| Wo | Farbe vorher | Kontrast vorher | Farbe nachher | Kontrast nachher |
+|----|--------------|----------------:|---------------|-----------------:|
+| „NAVIGATION“, Karten-Titel, Tabellenköpfe, Coin-Namen, Uhrzeit, Benutzer-Rolle | `#4a4e66` auf `#1a1d27` | 2,06 : 1 | `#8a8fa8` | **5,26 : 1** |
+| Untertitel, Formular-Beschriftungen, Navigation | `#8a8fa8` auf `#1a1d27` | 5,26 : 1 | `#a3a8bf` | **7,13 : 1** |
+| Roter Text (Top Verlierer, Fehlermeldungen, Kurs fällt) | `#ef4444` auf `#1a1d27` | 4,47 : 1 | `#f87171` | **6,08 : 1** |
+| Knopf „Nachricht senden“ / „Anmelden“ | weiß auf `#f97316` | 2,80 : 1 | dunkel `#0f1117` auf `#f97316` | **6,73 : 1** |
+| Logo-Symbol und Avatar-Buchstabe | weiß auf Orange | 2,80 : 1 | dunkel `#0f1117` auf Orange | **6,73 : 1** |
+| Platzhalter in Formularfeldern („z.B. Max Mustermann“) | Chrome-Standard `#757575` | 3,27 : 1 | `#8a8fa8` | **4,72 : 1** |
+| Achsen-Beschriftung im Kurs-Diagramm | `#4a4e66` | 2,06 : 1 | `#8a8fa8` | **5,26 : 1** |
+
+Die Kontrastwerte habe ich mit der WCAG-Formel nachgerechnet. Zusätzlich habe ich auf allen Seiten (Dashboard, Watchlist, Alarme, Kurse, Kontakt) per Skript jeden sichtbaren Text gegen seinen Hintergrund geprüft: kein Text liegt mehr unter 4,5 : 1.
+
+**Was habe ich im Code geändert?**
+
+| Datei | Änderung |
+|-------|----------|
+| `frontend-angular/src/styles.css` | Farb-Variablen `--text-gedimmt`, `--text-sehr-gedimmt` und `--rot` heller gemacht; `.haupt-knopf` mit dunkler Schrift statt weiß; neue Regel `::placeholder` für die Platzhalter-Farbe |
+| `frontend-angular/src/app/components/shared/layout/layout.component.ts` | Logo-Symbol und Avatar-Buchstabe mit dunkler Schrift (`color: var(--hintergrund)`) |
+| `frontend-angular/src/app/components/login/login.component.ts` | Logo-Symbol mit dunkler Schrift |
+| `frontend-angular/src/app/components/prices/prices.component.ts` | Achsen-Farbe im Diagramm von `#4a4e66` auf `#8a8fa8` |
+
+Weil fast alle Farben als CSS-Variablen in `styles.css` stehen, reicht eine Änderung dort für die ganze App. Das Aussehen bleibt gleich (dunkles Design, oranger Akzent), die grauen Texte sind nur besser lesbar.
+
+**Commit:**
+
+**Vorher / Nachher im Browser:**
+
+![Dashboard vorher](<Bilder/Schritt2 Kontrast vorher - dashboard.png>)
+
+*Bild 4: Dashboard vorher. „NAVIGATION“, die Karten-Titel und die Coin-Namen sind kaum lesbar.*
+
+![Dashboard nachher](<Bilder/Schritt2 Kontrast nachher - dashboard.png>)
+
+*Bild 5: Dashboard nachher. Alle grauen Texte sind deutlich heller, der rote Wert bei „Top Verlierer“ ist besser lesbar.*
+
+![Kontakt vorher](<Bilder/Schritt2 Kontrast vorher - contact.png>)
+
+*Bild 6: Kontakt-Seite vorher. Der Knopf „Nachricht senden“ hat weiße Schrift auf Orange.*
+
+![Kontakt nachher](<Bilder/Schritt2 Kontrast nachher - contact.png>)
+
+*Bild 7: Kontakt-Seite nachher. Der Knopf hat dunkle Schrift, die Platzhalter sind besser lesbar.*
+
+**Ergebnis in WAVE danach:**
+
+<!-- WAVE-Screenshot Dashboard und Kontakt nach Schritt 2 hier einfügen -->
+
+| Was WAVE zählt | Dashboard vorher | Dashboard nachher | Kontakt vorher | Kontakt nachher |
+|----------------|-----------------:|------------------:|---------------:|----------------:|
+| Fehler | 0 | | 4 | |
+| Kontrast-Fehler | 8 | | 3 | |
+| Warnungen | 9 | | 9 | |
+| AIM Score | 6,5 | | 6,2 | |
+
+---
+
+### Schritt 3: …
 
 **Datum:**
 **Was war das Problem?**
 **Was habe ich im Code geändert?** (Datei + kurze Beschreibung)
 **Commit:**
 **Ergebnis in WAVE danach:**
-
-<!-- Screenshot nach der Änderung hier einfügen -->
 
 ---
 
