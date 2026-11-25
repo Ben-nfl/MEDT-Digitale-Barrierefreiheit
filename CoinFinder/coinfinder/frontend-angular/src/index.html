@@ -1,0 +1,25 @@
+<!doctype html>
+<!-- die sprache hilft vorleseprogrammen, den text richtig auszusprechen. -->
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>CoinFinder</title>
+  <!-- interne links und dateipfade werden vom anfang dieser webseite aus aufgelöst. -->
+  <base href="/">
+  <!-- auf mobilen geräten soll die seite die tatsächliche breite des bildschirms verwenden. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!-- lädt die schriften für normalen text und für zahlen aus dem internet. -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- dieser hinweis wird angezeigt, wenn javascript ausgeschaltet ist und angular deshalb nicht starten kann. -->
+  <noscript>
+    <p style="padding: 24px; font-family: sans-serif; font-size: 1.125rem; color: #e8e9f0; background: #0f1117;">
+      CoinFinder braucht JavaScript. Bitte aktiviere JavaScript in deinem Browser, um die App zu nutzen.
+    </p>
+  </noscript>
+  <!-- hier setzt angular beim starten die hauptkomponente und damit die ganze app ein. -->
+  <app-root></app-root>
+</body>
+</html>

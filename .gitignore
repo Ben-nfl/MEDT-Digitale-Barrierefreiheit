@@ -1,15 +1,22 @@
-# macOS
+# macos
 .DS_Store
 
-# Installierte Abhängigkeiten und generierte Dateien
+# installierte abhängigkeiten und generierte dateien
 node_modules/
 dist/
 .angular/
 coverage/
 *.log
 
-# Lokale Zugangsdaten
+# lokale zugangsdaten
 .env
 .env.*
-!.env.example
-!.env.sample
+
+# persönliche projektdaten und innere git-repositories nicht veröffentlichen
+/CoinFinder/data/
+/Praxisaufgabe Digitale Barrierefreiheit.pdf
+**/.git/
+
+# dateiübersicht nur lokal behalten
+/Geänderte Dateien Barrierefreiheit.md
+/Geänderte Dateien Barrierefreiheit.pdf

@@ -1,0 +1,79 @@
+version: '3.9'
+
+services:
+
+  # hier läuft die datenbank, in der coins und alarme gespeichert werden.
+  db:
+    image: postgres:16-alpine
+    container_name: coinfinder-db
+    environment:
+      POSTGRES_DB:       coinfinder
+      POSTGRES_USER:     coinfinder
+      POSTGRES_PASSWORD: coinfinder123
+    volumes:
+      # die daten bleiben in diesem speicher erhalten, auch wenn der container neu erstellt wird.
+      - coinfinder-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      # prüft, ob die datenbank schon bereit ist. andere dienste können darauf warten.
+      test: ["CMD-SHELL", "pg_isready -U coinfinder -d coinfinder"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # dieses startskript fügt beispieldaten ein, falls die watchlist noch leer ist.
+  seed:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: coinfinder-seed
+    # benutzt dasselbe gebaute image, startet hier aber das befüllskript statt des webservers.
+    command: node seed.js
+    environment:
+      DB_HOST:     db
+      DB_PORT:     5432
+      DB_NAME:     coinfinder
+      DB_USER:     coinfinder
+      DB_PASSWORD: coinfinder123
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure
+
+  # dieser dienst liefert die gebaute angular-app aus und beantwortet die backend-anfragen.
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: coinfinder-backend
+    ports:
+      # macht den webserver im browser über port 3001 des rechners erreichbar.
+      - "3001:3001"
+    environment:
+      PORT:        3001
+      NODE_ENV:    production
+      DB_HOST:     db
+      DB_PORT:     5432
+      DB_NAME:     coinfinder
+      DB_USER:     coinfinder
+      DB_PASSWORD: coinfinder123
+      JWT_SECRET:  coinfinder-geheim-2024
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      # fragt die kleine statusroute ab. eine erfolgreiche antwort bedeutet, dass der webserver erreichbar ist.
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/api/health', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+# docker verwaltet den gemeinsamen datenspeicher für die datenbank unter diesem namen.
+volumes:
+  coinfinder-db:
+    driver: local
