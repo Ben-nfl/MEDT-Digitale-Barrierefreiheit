@@ -29,7 +29,7 @@ import { AuthService } from '../../services/auth.service';
     }
     .logo-text { font-size: 1.375rem; font-weight: 700; letter-spacing: -0.5px; }
     .logo-text span { color: var(--akzent); }
-    h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 4px; }
+    h1 { font-size: 1.125rem; font-weight: 600; margin-bottom: 4px; }
     .unter { font-size: 0.8125rem; color: var(--text-gedimmt); margin-bottom: 24px; }
     .hinweis {
       background: rgba(249,115,22,0.08);
@@ -55,7 +55,7 @@ import { AuthService } from '../../services/auth.service';
           <div class="logo-icon">🪙</div>
           <div class="logo-text">Coin<span>Finder</span></div>
         </div>
-        <h2>Willkommen zurück</h2>
+        <h1>Willkommen zurück</h1>
         <p class="unter">Meld dich an um deine Coins zu tracken</p>
 
         <div class="hinweis">

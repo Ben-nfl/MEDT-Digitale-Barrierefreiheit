@@ -39,7 +39,7 @@ declare const Chart: any;
   template: `
     <app-layout>
       <div class="kopf">
-        <div class="titel">Kurse</div>
+        <h1 class="titel">Kurse</h1>
         <div class="unter">Preisverläufe und aktuelle Kursdaten</div>
       </div>
 
@@ -47,7 +47,7 @@ declare const Chart: any;
       <div class="karte">
         <div class="karte-kopf">
           <div>
-            <span class="karte-titel">Kursverlauf</span>
+            <h2 class="karte-titel">Kursverlauf</h2>
           </div>
           <div style="display:flex; gap: 8px; flex-wrap: wrap">
             <div class="tabs">
@@ -68,7 +68,7 @@ declare const Chart: any;
       <!-- Preistabelle -->
       <div class="karte">
         <div class="karte-kopf">
-          <div class="karte-titel">Aktuelle Preise</div>
+          <h2 class="karte-titel">Aktuelle Preise</h2>
           <span style="font-size: 0.75rem; color: var(--text-sehr-gedimmt)">Letzte Aktualisierung: {{ letzteAkt }}</span>
         </div>
         <table>

@@ -21,12 +21,12 @@ import { NotificationService } from '../../services/notification.service';
   template: `
     <app-layout>
       <div class="kopf">
-        <div class="titel">Kontakt</div>
+        <h1 class="titel">Kontakt</h1>
         <div class="unter">Schreib uns eine Nachricht</div>
       </div>
 
       <div class="karte">
-        <div class="karte-kopf">✉️ Kontaktformular</div>
+        <h2 class="karte-kopf"><span aria-hidden="true">✉️</span> Kontaktformular</h2>
         <div class="form">
           <p class="pflicht-hinweis">Felder mit <span class="pflicht" aria-hidden="true">*</span> sind Pflichtfelder.</p>
           <div class="feld-gruppe">

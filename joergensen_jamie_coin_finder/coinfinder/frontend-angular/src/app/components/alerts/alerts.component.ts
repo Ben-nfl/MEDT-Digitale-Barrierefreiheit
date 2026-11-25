@@ -35,14 +35,14 @@ import { NotificationService } from '../../services/notification.service';
   template: `
     <app-layout>
       <div class="kopf">
-        <div class="titel">Alarme</div>
+        <h1 class="titel">Alarme</h1>
         <div class="unter">Preis-Benachrichtigungen einrichten</div>
       </div>
 
       <div class="zwei">
         <!-- Alarm erstellen -->
         <div class="karte">
-          <div class="karte-kopf">🔔 Neuen Alarm erstellen</div>
+          <h2 class="karte-kopf"><span aria-hidden="true">🔔</span> Neuen Alarm erstellen</h2>
           <div class="form">
             <p class="pflicht-hinweis">Felder mit <span class="pflicht" aria-hidden="true">*</span> sind Pflichtfelder.</p>
             <div class="feld-gruppe">
@@ -69,7 +69,7 @@ import { NotificationService } from '../../services/notification.service';
 
         <!-- Info-Box -->
         <div class="karte">
-          <div class="karte-kopf">ℹ️ So funktionieren Alarme</div>
+          <h2 class="karte-kopf"><span aria-hidden="true">ℹ️</span> So funktionieren Alarme</h2>
           <div class="form" style="color: var(--text-gedimmt); font-size: 0.8125rem; line-height: 1.7">
             <p style="margin-bottom: 12px">Alarme werden automatisch geprüft wenn neue Preisdaten eintreffen (alle ~60 Sekunden von CoinGecko).</p>
             <p style="margin-bottom: 12px">Du bekommst eine <strong style="color: var(--text)">Echtzeit-Benachrichtigung</strong> sobald ein Alarm ausgelöst wurde – ohne die Seite neu laden zu müssen.</p>
@@ -80,7 +80,7 @@ import { NotificationService } from '../../services/notification.service';
 
       <!-- Alarm-Liste -->
       <div class="karte">
-        <div class="karte-kopf">Alle Alarme ({{ alarme.length }})</div>
+        <h2 class="karte-kopf">Alle Alarme ({{ alarme.length }})</h2>
         <div *ngIf="loading" class="lade-text">Lade Alarme...</div>
         <div *ngIf="!loading && alarme.length === 0" class="lade-text">Keine Alarme vorhanden</div>
         <div class="alarm-eintrag" *ngFor="let a of alarme">

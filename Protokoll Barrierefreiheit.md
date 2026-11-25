@@ -123,8 +123,8 @@ Diese Punkte gehören auch zu WCAG 2.2 AA und sollen geprüft werden:
 - [x] Kontrast-Farben in `styles.css` anpassen (Problem 1) → Schritt 2
 - [x] Schriftgrößen vergrößern und auf `rem` umstellen (Problem 2) → Schritt 3
 - [ ] Navigation bei 200 % Zoom / schmalem Bildschirm anzeigen (neu gefunden in Schritt 3)
-- [ ] Überschriften-Struktur einbauen (Problem 3)
-- [ ] `<noscript>`-Hinweis prüfen (Problem 4)
+- [x] Überschriften-Struktur einbauen (Problem 3) → Schritt 5
+- [x] `<noscript>`-Hinweis prüfen (Problem 4) → Schritt 5
 - [ ] Abmelde-Knopf beschriften
 - [ ] Gewinn/Verlust nicht nur über Farbe zeigen
 - [ ] Tastatur-Bedienung und Fokus prüfen
@@ -227,7 +227,7 @@ Die Vermutungen von oben haben sich bestätigt. Auf dieser Seite gibt es sogar *
 - [x] Fehlermeldung mit `role="alert"` versehen, damit der Screenreader sie vorliest → Schritt 4
 - [x] `autocomplete="name"` und `autocomplete="email"` ergänzen → Schritt 4
 - [x] Kontrast vom orangen Knopf verbessern (dunkleres Orange oder dunkle Schrift) → Schritt 2
-- [ ] „Kontakt“ als `<h1>` auszeichnen
+- [x] „Kontakt“ als `<h1>` auszeichnen → Schritt 5
 
 ---
 
@@ -460,7 +460,104 @@ Dazu kamen:
 
 ---
 
-### Schritt 5: …
+### Schritt 5: Überschriften-Struktur und `<noscript>`-Hinweis
+
+**Datum:** 25.11.2026
+**Hinweis:** Dieser Schritt wurde mit KI-Unterstützung (Claude Code) umgesetzt.
+
+**Was war das Problem?**
+Nach Schritt 4 hatten Dashboard und Kontakt-Seite noch je 2 Warnungen in WAVE:
+
+1. **„No heading structure“** (Problem 3): Keine Seite hatte echte Überschriften. „Dashboard“, „Kontakt“ usw. sahen zwar groß und fett aus, waren im Code aber nur `<div>`. Screenreader-Nutzer springen normalerweise mit der Taste „H“ von Überschrift zu Überschrift. Das ging nicht. (WCAG **1.3.1 Info und Beziehungen**, **2.4.6 Überschriften und Beschriftungen**)
+2. **„Noscript element“** (Problem 4): Das `<noscript>` stand gar nicht in meiner `index.html`. Angular setzt es beim Bauen selbst ein, weil es das CSS „kritisch“ einbettet (`inlineCritical`). Darin stand nur ein Stylesheet-Link: `<noscript><link rel="stylesheet" href="styles-….css"></noscript>`. Wer JavaScript ausgeschaltet hat, sah also eine leere Seite **ohne Erklärung**.
+
+**Was habe ich im Code geändert?**
+
+**1. Überschriften:** Auf jeder Seite ist der Seitentitel jetzt ein `<h1>`, die Titel der Karten sind `<h2>`. Die CSS-Klassen bleiben gleich, deshalb sieht alles aus wie vorher.
+
+Vorher: `<div class="titel">Dashboard</div>`
+Nachher: `<h1 class="titel">Dashboard</h1>`
+
+| Seite | `<h1>` | `<h2>` |
+|-------|--------|--------|
+| Dashboard | Dashboard | Coins beobachtet, Aktive Alarme, Top Gewinner, Top Verlierer, Aktuelle Kurse |
+| Watchlist | Watchlist | Coin hinzufügen, Beobachtete Coins |
+| Alarme | Alarme | Neuen Alarm erstellen, So funktionieren Alarme, Alle Alarme |
+| Kurse | Kurse | Kursverlauf, Aktuelle Preise |
+| Kontakt | Kontakt | Kontaktformular |
+| Login | Willkommen zurück | – |
+
+Die Emojis in den Karten-Titeln (✉️, ➕, 🔔, ℹ️) stehen jetzt in `<span aria-hidden="true">`. Sonst würde der Screenreader z. B. „Briefumschlag Kontaktformular“ vorlesen.
+In `styles.css` steht die Regel `h1, h2 { font-size: inherit; font-weight: inherit; }`. Damit übernimmt der Browser nicht seine eigenen großen Standard-Größen für Überschriften. Die Größe kommt weiter aus den Klassen.
+
+**2. `<noscript>`-Hinweis:**
+- In `angular.json` ist `inlineCritical` ausgeschaltet. Angular setzt sein leeres `<noscript>` nicht mehr ein.
+- In `index.html` steht ein eigener, verständlicher Hinweis: „CoinFinder braucht JavaScript. Bitte aktiviere JavaScript in deinem Browser, um die App zu nutzen.“ (heller Text auf dunklem Hintergrund, 18 px groß)
+
+WAVE meldet `<noscript>` trotzdem weiter als **Warnung**. Das ist kein Fehler: WAVE zeigt jedes `<noscript>` an, damit man prüft, ob der Inhalt sinnvoll ist. Das habe ich geprüft, der Hinweis ist jetzt verständlich und gut lesbar.
+
+**Geänderte Dateien:**
+
+| Datei | Änderung |
+|-------|----------|
+| `.../dashboard/dashboard.component.ts` | `<h1>` + 5 × `<h2>` |
+| `.../watchlist/watchlist.component.ts` | `<h1>` + 2 × `<h2>`, Emoji versteckt |
+| `.../alerts/alerts.component.ts` | `<h1>` + 3 × `<h2>`, Emojis versteckt |
+| `.../prices/prices.component.ts` | `<h1>` + 2 × `<h2>` |
+| `.../contact/contact.component.ts` | `<h1>` + `<h2>`, Emoji versteckt |
+| `.../login/login.component.ts` | „Willkommen zurück“ von `<h2>` auf `<h1>` |
+| `frontend-angular/src/styles.css` | Regel `h1, h2 { font-size: inherit; font-weight: inherit; }` |
+| `frontend-angular/src/index.html` | eigener `<noscript>`-Hinweis auf Deutsch |
+| `frontend-angular/angular.json` | `inlineCritical: false` im Production-Build |
+
+**Überprüfung:** Ein Skript hat auf jeder Seite alle Überschriften ausgelesen. Jede Seite hat genau eine `<h1>` und darunter `<h2>`, es wird keine Ebene übersprungen. In der ausgelieferten Seite steht nur noch mein eigenes `<noscript>`.
+
+**Commit:**
+
+**Vorher / Nachher im Browser:**
+
+![Dashboard vorher](<Bilder/Schritt5 Überschriften vorher - dashboard.png>)
+
+*Bild 19: Dashboard vorher.*
+
+![Dashboard nachher](<Bilder/Schritt5 Überschriften nachher - dashboard.png>)
+
+*Bild 20: Dashboard nachher. Optisch hat sich nichts geändert, im Code sind „Dashboard“ jetzt `<h1>` und die Karten-Titel `<h2>`.*
+
+**Hinweis:** Das Diagramm „Kursverlauf“ auf der Kurse-Seite ist auf den Screenshots leer, schon **vor** dieser Änderung (siehe `Schritt5 Überschriften vorher - prices.png`). Wahrscheinlich liefert die CoinGecko-API gerade keine Verlaufsdaten. Das hat nichts mit der Barrierefreiheit zu tun.
+
+**Ergebnis in WAVE danach:**
+
+![WAVE-Zusammenfassung Dashboard nach Schritt 5](<Bilder/Bildschirmfoto 2026-11-25 um 21.43.12.png>)
+
+*Bild 21: WAVE auf dem Dashboard nach Schritt 5. Nur noch 1 Warnung (`<noscript>`). Neu unter „Structural Elements“: 1 × Heading level 1 und 5 × Heading level 2.*
+
+![Dashboard mit WAVE-Markierungen nach Schritt 5](<Bilder/Bildschirmfoto 2026-11-25 um 21.43.20.png>)
+
+*Bild 22: Das Dashboard mit den WAVE-Markierungen. Man sieht „h1“ bei „Dashboard“ und „h2“ bei den Karten-Titeln.*
+
+![WAVE auf der Kontakt-Seite nach Schritt 5](<Bilder/Bildschirmfoto 2026-11-25 um 21.43.39.png>)
+
+*Bild 23: WAVE auf der Kontakt-Seite nach Schritt 5. „h1“ bei „Kontakt“, „h2“ bei „Kontaktformular“, nur noch 1 Warnung.*
+
+| Was WAVE zählt | Dashboard vor Schritt 5 | Dashboard nach Schritt 5 | Kontakt vor Schritt 5 | Kontakt nach Schritt 5 |
+|----------------|------------------------:|-------------------------:|----------------------:|-----------------------:|
+| Fehler | 0 | 0 | 0 | 0 |
+| Kontrast-Fehler | 0 | 0 | 0 | 0 |
+| Warnungen | 2 | **1** | 2 | **1** |
+| Struktur | 7 | **13** | 2 | **4** |
+| ARIA | 0 | 0 | 5 | 6 |
+| AIM Score | 10 | 10 | 10 | 10 |
+
+**Was das bedeutet:**
+
+- **„No heading structure“ ist auf beiden Seiten weg.** WAVE zählt jetzt die Überschriften als Struktur-Elemente: Dashboard 1 × `h1` + 5 × `h2`, Kontakt 1 × `h1` + 1 × `h2`.
+- Übrig ist nur noch **„Noscript element“**. Das ist jetzt mein eigener deutscher Hinweis. WAVE zeigt jedes `<noscript>` als Warnung an, damit man den Inhalt prüft. Der Inhalt ist sinnvoll, darum bleibt das Element absichtlich drin.
+- Bei ARIA ist auf der Kontakt-Seite ein „ARIA hidden“ dazugekommen (6 statt 5). Das ist das versteckte Emoji ✉️ im Titel „Kontaktformular“, ebenfalls Absicht.
+
+---
+
+### Schritt 6: …
 
 **Datum:**
 **Was war das Problem?**
@@ -472,13 +569,14 @@ Dazu kamen:
 
 ## 5. Endergebnis
 
-**Zwischenstand nach Schritt 4 (25.11.2026):**
+**Zwischenstand nach Schritt 5 (25.11.2026):**
 
 | | Dashboard vorher | Dashboard jetzt | Kontakt vorher | Kontakt jetzt |
 |---|---:|---:|---:|---:|
 | Fehler | 0 | 0 | 4 | **0** |
 | Kontrast-Fehler | 8 | **0** | 3 | **0** |
-| Warnungen | 9 | **2** | 9 | **2** |
+| Warnungen | 9 | **1** | 9 | **1** |
 | AIM Score | 6,5 / 10 (65 %) | **10 / 10 (100 %)** | 6,2 / 10 (62 %) | **10 / 10 (100 %)** |
 
-Das Ziel von mindestens 90 % ist auf beiden geprüften Seiten erreicht. Offen sind noch: Überschriften-Struktur, `<noscript>`-Hinweis, Navigation bei 200 % Zoom, Tastatur-Bedienung, Live-Kurse für Screenreader, Gewinn/Verlust nicht nur über Farbe, Abmelde-Knopf und die Barrierefreiheitserklärung.
+Das Ziel von mindestens 90 % ohne kritische Fehler ist auf beiden geprüften Seiten erreicht. Die eine verbleibende Warnung (`<noscript>`) ist geprüft und beabsichtigt.
+Offen sind noch: Navigation bei 200 % Zoom, Tastatur-Bedienung, Live-Kurse für Screenreader, Gewinn/Verlust nicht nur über Farbe, Abmelde-Knopf und die Barrierefreiheitserklärung.

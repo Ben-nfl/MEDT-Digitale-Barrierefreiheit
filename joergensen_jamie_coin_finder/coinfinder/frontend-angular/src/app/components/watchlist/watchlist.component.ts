@@ -46,7 +46,7 @@ import { NotificationService } from '../../services/notification.service';
     <app-layout>
       <div class="kopf">
         <div>
-          <div class="titel">Watchlist</div>
+          <h1 class="titel">Watchlist</h1>
           <div class="unter">Coins hinzufügen und verwalten</div>
         </div>
       </div>
@@ -54,7 +54,7 @@ import { NotificationService } from '../../services/notification.service';
       <div class="zwei">
         <!-- Formular: Coin hinzufügen -->
         <div class="karte">
-          <div class="karte-kopf">➕ Coin hinzufügen</div>
+          <h2 class="karte-kopf"><span aria-hidden="true">➕</span> Coin hinzufügen</h2>
           <div class="form">
             <p class="pflicht-hinweis">Felder mit <span class="pflicht" aria-hidden="true">*</span> sind Pflichtfelder.</p>
             <div class="feld-gruppe suche-container">
@@ -89,7 +89,7 @@ import { NotificationService } from '../../services/notification.service';
 
         <!-- Liste der Coins -->
         <div class="karte">
-          <div class="karte-kopf">Beobachtete Coins ({{ watchlist.length }})</div>
+          <h2 class="karte-kopf">Beobachtete Coins ({{ watchlist.length }})</h2>
           <table>
             <thead>
               <tr><th>Coin</th><th>Typ</th><th>Aktion</th></tr>

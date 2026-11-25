@@ -40,7 +40,7 @@ import { WebsocketService } from '../../services/websocket.service';
     <app-layout>
       <div class="kopf">
         <div>
-          <div class="titel">Dashboard</div>
+          <h1 class="titel">Dashboard</h1>
           <div class="unter">Deine Krypto-Übersicht auf einem Blick</div>
         </div>
         <div class="letzte">{{ letzteAktualisierung }}</div>
@@ -48,22 +48,22 @@ import { WebsocketService } from '../../services/websocket.service';
 
       <div class="stats">
         <div class="stat">
-          <div class="stat-label">Coins beobachtet</div>
+          <h2 class="stat-label">Coins beobachtet</h2>
           <div class="stat-wert">{{ watchlist.length }}</div>
           <div class="stat-unter">in deiner Watchlist</div>
         </div>
         <div class="stat">
-          <div class="stat-label">Aktive Alarme</div>
+          <h2 class="stat-label">Aktive Alarme</h2>
           <div class="stat-wert">{{ aktiveAlarme }}</div>
           <div class="stat-unter">werden überwacht</div>
         </div>
         <div class="stat">
-          <div class="stat-label">Top Gewinner</div>
+          <h2 class="stat-label">Top Gewinner</h2>
           <div class="stat-wert" style="color: var(--gruen)">{{ topGewinner?.change | number:'1.2-2' }}%</div>
           <div class="stat-unter">{{ topGewinner?.name || '–' }}</div>
         </div>
         <div class="stat">
-          <div class="stat-label">Top Verlierer</div>
+          <h2 class="stat-label">Top Verlierer</h2>
           <div class="stat-wert" style="color: var(--rot)">{{ topVerlierer?.change | number:'1.2-2' }}%</div>
           <div class="stat-unter">{{ topVerlierer?.name || '–' }}</div>
         </div>
@@ -71,7 +71,7 @@ import { WebsocketService } from '../../services/websocket.service';
 
       <div class="karte">
         <div class="karte-kopf">
-          <div class="karte-titel">Aktuelle Kurse</div>
+          <h2 class="karte-titel">Aktuelle Kurse</h2>
         </div>
         <table>
           <thead>
