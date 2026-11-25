@@ -11,11 +11,11 @@ import { NotificationService } from '../../services/notification.service';
   imports: [CommonModule, FormsModule, LayoutComponent],
   styles: [`
     .kopf { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; }
-    .titel { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-    .unter { font-size: 13px; color: var(--text-gedimmt); }
+    .titel { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+    .unter { font-size: 0.8125rem; color: var(--text-gedimmt); }
     .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .karte { background: var(--karte); border: 1px solid var(--rand); border-radius: var(--ecke); overflow: hidden; }
-    .karte-kopf { padding: 14px 18px; border-bottom: 1px solid var(--rand); font-size: 14px; font-weight: 600; }
+    .karte-kopf { padding: 14px 18px; border-bottom: 1px solid var(--rand); font-size: 0.875rem; font-weight: 600; }
     .form { padding: 18px; }
     .suche-container { position: relative; }
     .suche-dropdown {
@@ -26,17 +26,17 @@ import { NotificationService } from '../../services/notification.service';
     }
     .suche-eintrag {
       padding: 9px 12px; cursor: pointer; display: flex; align-items: center;
-      gap: 9px; font-size: 13px; transition: background 0.1s;
+      gap: 9px; font-size: 0.8125rem; transition: background 0.1s;
     }
     .suche-eintrag:hover { background: rgba(255,255,255,0.04); }
     .suche-avatar {
-      width: 22px; height: 22px; border-radius: 50%; overflow: hidden;
+      width: 1.75rem; height: 1.75rem; border-radius: 50%; overflow: hidden;
       background: var(--akzent-schwach); display: flex; align-items: center;
-      justify-content: center; font-size: 9px; color: var(--akzent-hell); flex-shrink: 0;
+      justify-content: center; font-size: 0.75rem; color: var(--akzent-hell); flex-shrink: 0;
     }
     .suche-avatar img { width: 100%; height: 100%; }
     .symbol-tag {
-      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
       color: var(--text-sehr-gedimmt); background: rgba(255,255,255,0.04);
       padding: 2px 6px; border-radius: 4px; margin-left: 6px;
     }
@@ -67,7 +67,7 @@ import { NotificationService } from '../../services/notification.service';
                     <span *ngIf="!c.thumb">{{ c.symbol[0] }}</span>
                   </div>
                   <span>{{ c.name }}</span>
-                  <span style="color: var(--text-sehr-gedimmt); font-size: 11px;">{{ c.symbol }}</span>
+                  <span style="color: var(--text-sehr-gedimmt); font-size: 0.75rem;">{{ c.symbol }}</span>
                 </div>
               </div>
             </div>

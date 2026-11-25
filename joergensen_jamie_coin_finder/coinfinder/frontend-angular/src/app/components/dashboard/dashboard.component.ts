@@ -11,9 +11,9 @@ import { WebsocketService } from '../../services/websocket.service';
   imports: [CommonModule, DecimalPipe, LayoutComponent],
   styles: [`
     .kopf { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; }
-    .titel { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
-    .unter { font-size: 13px; color: var(--text-gedimmt); }
-    .letzte { font-size: 11px; color: var(--text-sehr-gedimmt); font-family: 'JetBrains Mono', monospace; }
+    .titel { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
+    .unter { font-size: 0.8125rem; color: var(--text-gedimmt); }
+    .letzte { font-size: 0.75rem; color: var(--text-sehr-gedimmt); font-family: 'JetBrains Mono', monospace; }
     .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
     .stat {
       background: var(--karte); border: 1px solid var(--rand);
@@ -21,16 +21,16 @@ import { WebsocketService } from '../../services/websocket.service';
     }
     .stat:hover { border-color: var(--rand-hell); }
     .stat-label {
-      font-size: 11px; color: var(--text-sehr-gedimmt); text-transform: uppercase;
+      font-size: 0.75rem; color: var(--text-sehr-gedimmt); text-transform: uppercase;
       letter-spacing: 0.07em; margin-bottom: 7px; font-weight: 500;
     }
-    .stat-wert { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 500; line-height: 1; }
-    .stat-unter { font-size: 11px; color: var(--text-gedimmt); margin-top: 4px; }
+    .stat-wert { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 500; line-height: 1; }
+    .stat-unter { font-size: 0.75rem; color: var(--text-gedimmt); margin-top: 4px; }
     .karte { background: var(--karte); border: 1px solid var(--rand); border-radius: var(--ecke); overflow: hidden; }
     .karte-kopf { padding: 14px 18px; border-bottom: 1px solid var(--rand); display: flex; align-items: center; justify-content: space-between; }
-    .karte-titel { font-size: 14px; font-weight: 600; }
+    .karte-titel { font-size: 0.875rem; font-weight: 600; }
     .symbol-tag {
-      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
       color: var(--text-sehr-gedimmt); background: rgba(255,255,255,0.04);
       padding: 2px 6px; border-radius: 4px; margin-left: 6px;
     }

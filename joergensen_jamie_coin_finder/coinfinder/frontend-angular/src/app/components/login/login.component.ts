@@ -25,17 +25,17 @@ import { AuthService } from '../../services/auth.service';
     .logo-icon {
       width: 36px; height: 36px; background: var(--akzent);
       border-radius: 10px; display: flex; align-items: center;
-      justify-content: center; font-size: 18px; color: var(--hintergrund);
+      justify-content: center; font-size: 1.125rem; color: var(--hintergrund);
     }
-    .logo-text { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+    .logo-text { font-size: 1.375rem; font-weight: 700; letter-spacing: -0.5px; }
     .logo-text span { color: var(--akzent); }
-    h2 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
-    .unter { font-size: 13px; color: var(--text-gedimmt); margin-bottom: 24px; }
+    h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 4px; }
+    .unter { font-size: 0.8125rem; color: var(--text-gedimmt); margin-bottom: 24px; }
     .hinweis {
       background: rgba(249,115,22,0.08);
       border: 1px solid rgba(249,115,22,0.25);
       border-radius: var(--ecke-klein);
-      padding: 10px 13px; font-size: 12px;
+      padding: 10px 13px; font-size: 0.75rem;
       color: var(--text-gedimmt); margin-bottom: 20px; line-height: 1.6;
     }
     .hinweis code {
@@ -45,7 +45,7 @@ import { AuthService } from '../../services/auth.service';
     .fehler {
       background: var(--rot-schwach); border: 1px solid rgba(239,68,68,0.3);
       color: var(--rot); border-radius: var(--ecke-klein);
-      padding: 9px 12px; font-size: 13px; margin-bottom: 12px;
+      padding: 9px 12px; font-size: 0.8125rem; margin-bottom: 12px;
     }
   `],
   template: `

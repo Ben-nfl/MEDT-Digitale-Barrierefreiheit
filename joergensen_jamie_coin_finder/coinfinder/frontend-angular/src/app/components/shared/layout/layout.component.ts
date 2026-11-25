@@ -40,13 +40,13 @@ import { NotificationService } from '../../../services/notification.service';
       background: var(--akzent);
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 15px; flex-shrink: 0; color: var(--hintergrund);
+      font-size: 0.9375rem; flex-shrink: 0; color: var(--hintergrund);
     }
-    .logo-name { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+    .logo-name { font-size: 1.0625rem; font-weight: 700; letter-spacing: -0.3px; }
     .logo-name span { color: var(--akzent); }
     .nav-gruppe { display: flex; flex-direction: column; gap: 2px; }
     .nav-label {
-      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--text-sehr-gedimmt);
       padding: 0 8px; margin-bottom: 4px;
     }
@@ -56,7 +56,7 @@ import { NotificationService } from '../../../services/notification.service';
       border-radius: var(--ecke-klein);
       border: none; background: transparent;
       color: var(--text-gedimmt);
-      font-family: 'Inter', sans-serif; font-size: 13.5px;
+      font-family: 'Inter', sans-serif; font-size: 0.8438rem;
       cursor: pointer; transition: all 0.15s; text-align: left;
       text-decoration: none;
     }
@@ -66,11 +66,11 @@ import { NotificationService } from '../../../services/notification.service';
       color: var(--akzent-hell);
       font-weight: 500;
     }
-    .nav-symbol { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+    .nav-symbol { font-size: 0.9375rem; width: 20px; text-align: center; flex-shrink: 0; }
     .verbindungs-info { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
     .ws-status {
       display: flex; align-items: center; gap: 8px;
-      font-size: 11px; color: var(--text-sehr-gedimmt);
+      font-size: 0.75rem; color: var(--text-sehr-gedimmt);
       padding: 8px 10px;
       background: rgba(255,255,255,0.02);
       border-radius: var(--ecke-klein);
@@ -93,15 +93,15 @@ import { NotificationService } from '../../../services/notification.service';
       width: 28px; height: 28px; border-radius: 50%;
       background: linear-gradient(135deg, var(--akzent), #fbbf24);
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; color: var(--hintergrund); font-weight: 600; flex-shrink: 0;
+      font-size: 0.75rem; color: var(--hintergrund); font-weight: 600; flex-shrink: 0;
     }
     .benutzer-daten { flex: 1; min-width: 0; }
-    .benutzer-name  { font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .benutzer-rolle { font-size: 10px; color: var(--text-sehr-gedimmt); text-transform: uppercase; letter-spacing: 0.05em; }
+    .benutzer-name  { font-size: 0.75rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .benutzer-rolle { font-size: 0.75rem; color: var(--text-sehr-gedimmt); text-transform: uppercase; letter-spacing: 0.05em; }
     .abmelde-knopf {
       background: transparent; border: none;
       color: var(--text-sehr-gedimmt);
-      cursor: pointer; font-size: 14px; padding: 3px;
+      cursor: pointer; font-size: 0.875rem; padding: 3px;
       border-radius: 4px; transition: all 0.15s;
     }
     .abmelde-knopf:hover { color: var(--rot); }

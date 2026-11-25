@@ -41,7 +41,7 @@ body {
 table { width: 100%; border-collapse: collapse; }
 
 th {
-  font-size: 11px;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -54,7 +54,7 @@ th {
 
 td {
   padding: 13px 18px;
-  font-size: 13.5px;
+  font-size: 0.8438rem;
   border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 
@@ -69,7 +69,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   align-items: center;
   gap: 3px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11.5px;
+  font-size: 0.75rem;
   padding: 3px 8px;
   border-radius: 20px;
   font-weight: 500;
@@ -84,7 +84,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   padding: 10px 16px;
   border-radius: var(--ecke-klein);
   font-family: 'Inter', sans-serif;
-  font-size: 13.5px;
+  font-size: 0.8438rem;
   font-weight: 500;
   cursor: pointer;
   width: 100%;
@@ -110,7 +110,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   color: var(--text-gedimmt);
   padding: 4px 10px;
   border-radius: 6px;
-  font-size: 11.5px;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.15s;
   font-family: 'Inter', sans-serif;
@@ -127,11 +127,11 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   background: var(--gruen-schwach);
 }
 
-.lade-text { font-size: 13px; color: var(--text-gedimmt); padding: 20px 18px; }
-.fehler-text { font-size: 11.5px; color: var(--rot); margin-top: 5px; }
+.lade-text { font-size: 0.8125rem; color: var(--text-gedimmt); padding: 20px 18px; }
+.fehler-text { font-size: 0.75rem; color: var(--rot); margin-top: 5px; }
 
 .feld-beschriftung {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--text-gedimmt);
   margin-bottom: 5px;
   display: block;
@@ -147,7 +147,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   padding: 9px 11px;
   border-radius: var(--ecke-klein);
   font-family: 'Inter', sans-serif;
-  font-size: 13.5px;
+  font-size: 0.8438rem;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
 }

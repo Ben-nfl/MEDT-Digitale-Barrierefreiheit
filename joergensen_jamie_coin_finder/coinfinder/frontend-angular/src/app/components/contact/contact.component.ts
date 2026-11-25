@@ -10,13 +10,13 @@ import { NotificationService } from '../../services/notification.service';
   imports: [CommonModule, FormsModule, LayoutComponent],
   styles: [`
     .kopf { margin-bottom: 22px; }
-    .titel { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-    .unter { font-size: 13px; color: var(--text-gedimmt); }
+    .titel { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+    .unter { font-size: 0.8125rem; color: var(--text-gedimmt); }
     .karte { background: var(--karte); border: 1px solid var(--rand); border-radius: var(--ecke); overflow: hidden; max-width: 620px; }
-    .karte-kopf { padding: 14px 18px; border-bottom: 1px solid var(--rand); font-size: 14px; font-weight: 600; }
+    .karte-kopf { padding: 14px 18px; border-bottom: 1px solid var(--rand); font-size: 0.875rem; font-weight: 600; }
     .form { padding: 18px; }
     .feld-textarea { min-height: 130px; resize: vertical; font-family: 'Inter', sans-serif; }
-    .checkbox-zeile { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-gedimmt); }
+    .checkbox-zeile { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; color: var(--text-gedimmt); }
   `],
   template: `
     <app-layout>

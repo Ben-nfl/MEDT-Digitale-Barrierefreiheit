@@ -15,23 +15,23 @@ declare const Chart: any;
   imports: [CommonModule, DecimalPipe, FormsModule, LayoutComponent],
   styles: [`
     .kopf { margin-bottom: 22px; }
-    .titel { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-    .unter { font-size: 13px; color: var(--text-gedimmt); }
+    .titel { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+    .unter { font-size: 0.8125rem; color: var(--text-gedimmt); }
     .karte { background: var(--karte); border: 1px solid var(--rand); border-radius: var(--ecke); overflow: hidden; margin-bottom: 16px; }
     .karte-kopf { padding: 14px 18px; border-bottom: 1px solid var(--rand); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-    .karte-titel { font-size: 14px; font-weight: 600; }
+    .karte-titel { font-size: 0.875rem; font-weight: 600; }
     .tabs { display: flex; gap: 4px; flex-wrap: wrap; }
     .tabs button {
       background: transparent; border: 1px solid var(--rand);
       color: var(--text-gedimmt); padding: 3px 9px; border-radius: 5px;
-      font-size: 11.5px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s;
+      font-size: 0.75rem; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s;
     }
     .tabs button.aktiv, .tabs button:hover {
       background: var(--akzent-schwach); border-color: rgba(249,115,22,0.4); color: var(--akzent-hell);
     }
     .chart-bereich { padding: 16px; height: 260px; position: relative; }
     .symbol-tag {
-      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
       color: var(--text-sehr-gedimmt); background: rgba(255,255,255,0.04);
       padding: 2px 6px; border-radius: 4px; margin-left: 6px;
     }
@@ -69,7 +69,7 @@ declare const Chart: any;
       <div class="karte">
         <div class="karte-kopf">
           <div class="karte-titel">Aktuelle Preise</div>
-          <span style="font-size:11px; color: var(--text-sehr-gedimmt)">Letzte Aktualisierung: {{ letzteAkt }}</span>
+          <span style="font-size: 0.75rem; color: var(--text-sehr-gedimmt)">Letzte Aktualisierung: {{ letzteAkt }}</span>
         </div>
         <table>
           <thead>

@@ -121,7 +121,8 @@ Diese Punkte gehören auch zu WCAG 2.2 AA und sollen geprüft werden:
 ## 3. Plan: Was ich verbessern will
 
 - [x] Kontrast-Farben in `styles.css` anpassen (Problem 1) → Schritt 2
-- [ ] Schriftgrößen vergrößern und auf `rem` umstellen (Problem 2)
+- [x] Schriftgrößen vergrößern und auf `rem` umstellen (Problem 2) → Schritt 3
+- [ ] Navigation bei 200 % Zoom / schmalem Bildschirm anzeigen (neu gefunden in Schritt 3)
 - [ ] Überschriften-Struktur einbauen (Problem 3)
 - [ ] `<noscript>`-Hinweis prüfen (Problem 4)
 - [ ] Abmelde-Knopf beschriften
@@ -284,18 +285,101 @@ Weil fast alle Farben als CSS-Variablen in `styles.css` stehen, reicht eine Änd
 
 **Ergebnis in WAVE danach:**
 
-<!-- WAVE-Screenshot Dashboard und Kontakt nach Schritt 2 hier einfügen -->
-
-| Was WAVE zählt | Dashboard vorher | Dashboard nachher | Kontakt vorher | Kontakt nachher |
-|----------------|-----------------:|------------------:|---------------:|----------------:|
-| Fehler | 0 | | 4 | |
-| Kontrast-Fehler | 8 | | 3 | |
-| Warnungen | 9 | | 9 | |
-| AIM Score | 6,5 | | 6,2 | |
+Schritt 2 und Schritt 3 wurden gemeinsam mit WAVE geprüft. Das Ergebnis steht am Ende von Schritt 3.
 
 ---
 
-### Schritt 3: …
+### Schritt 3: Schriftgrößen vergrößern und auf `rem` umstellen
+
+**Datum:** 25.11.2026
+**Hinweis:** Dieser Schritt wurde mit KI-Unterstützung (Claude Code) umgesetzt.
+
+**Was war das Problem?**
+WAVE hat mehrere Warnungen „Very small text“ gezeigt (Problem 2). Viele Texte waren nur **9 bis 11,5 Pixel** groß, z. B. „NAVIGATION“, die Karten-Titel, die Coin-Namen in der Tabelle, die Benutzer-Rolle und die Status-Anzeigen bei den Alarmen.
+Außerdem waren **alle** Schriftgrößen in festen Pixeln (`px`) angegeben. Wenn jemand im Browser eine größere Standard-Schrift einstellt, wächst die Schrift dann nicht mit (WCAG 2.2 AA, Kriterium **1.4.4 Textgröße ändern**).
+
+**Was habe ich im Code geändert?**
+
+1. **Mindestgröße 12 Pixel:** Alle Texte unter 12 px sind jetzt mindestens 12 px groß.
+2. **`rem` statt `px`:** Alle Schriftgrößen sind von `px` in `rem` umgerechnet (1 rem = 16 px, die Standard-Schriftgröße des Browsers). Die Schrift richtet sich jetzt nach der Einstellung des Benutzers.
+3. **Coin-Symbol in der Watchlist-Suche:** Der Kreis war nur 22 × 22 px groß. Er ist jetzt `1.75rem` (28 px), damit die größere Schrift hineinpasst.
+
+| Größe vorher | Größe nachher | Wo zum Beispiel |
+|-------------:|--------------:|-----------------|
+| 9 px | 0.75rem (12 px) | Coin-Symbol in der Watchlist-Suche |
+| 10 px | 0.75rem (12 px) | „NAVIGATION“, Benutzer-Rolle, Coin-Namen, Alarm-Status |
+| 11 px | 0.75rem (12 px) | Karten-Titel, Tabellenköpfe, Uhrzeit, Verbindungs-Status |
+| 11,5 px | 0.75rem (12 px) | Formular-Beschriftungen, Fehlertexte, Zeitraum-Knöpfe |
+| 12 – 24 px | gleiche Größe in `rem` (z. B. 13 px → 0.8125rem) | restliche Texte |
+
+**Geänderte Dateien:**
+
+| Datei | Änderung |
+|-------|----------|
+| `frontend-angular/src/styles.css` | Schriftgrößen in `rem`, Minimum 12 px |
+| `.../components/shared/layout/layout.component.ts` | Seitenleiste: „NAVIGATION“, Status, Benutzer-Rolle |
+| `.../components/dashboard/dashboard.component.ts` | Karten-Titel, Coin-Namen, Uhrzeit |
+| `.../components/watchlist/watchlist.component.ts` | Coin-Namen, Coin-Symbol (Kreis größer) |
+| `.../components/alerts/alerts.component.ts` | Status-Anzeige der Alarme |
+| `.../components/prices/prices.component.ts` | Zeitraum-Knöpfe, „Letzte Aktualisierung“ |
+| `.../components/login/login.component.ts`, `.../contact/contact.component.ts`, `.../notification/notification.component.ts` | Schriftgrößen in `rem` |
+
+**Commit:**
+
+**Vorher / Nachher im Browser:**
+
+![Dashboard vorher](<Bilder/Schritt3 Schriftgröße vorher - dashboard.png>)
+
+*Bild 8: Dashboard vorher. „NAVIGATION“, die Karten-Titel und die Coin-Namen sind sehr klein.*
+
+![Dashboard nachher](<Bilder/Schritt3 Schriftgröße nachher - dashboard.png>)
+
+*Bild 9: Dashboard nachher. Die kleinen Texte sind jetzt mindestens 12 px groß. Das Layout bleibt gleich.*
+
+![Watchlist nachher](<Bilder/Schritt3 Schriftgröße nachher - watchlist.png>)
+
+*Bild 10: Watchlist nachher. Die Coin-Namen neben dem Kürzel sind besser lesbar.*
+
+**Test mit 200 % Zoom:**
+
+![Dashboard bei 200 % Zoom](<Bilder/Schritt3 Zoom 200 Prozent - dashboard.png>)
+
+*Bild 11: Dashboard bei 200 % Zoom. Die Texte sind gut lesbar und nichts wird abgeschnitten. **Aber die Seitenleiste mit der Navigation ist verschwunden.***
+
+**Neues Problem gefunden:** Ab einer Breite unter 900 px blendet die App die Seitenleiste mit `display: none` komplett aus (`layout.component.ts`). Bei 200 % Zoom oder auf dem Handy kann man dann **nicht mehr zu anderen Seiten wechseln** und sich nicht abmelden. Das verletzt WCAG 2.2 AA, Kriterium **1.4.10 Umbruch (Reflow)** und **1.4.4 Textgröße ändern** (Inhalt geht verloren). Das behebe ich in einem eigenen Schritt.
+
+**Ergebnis in WAVE danach (nach Schritt 2 und 3):**
+
+![WAVE-Zusammenfassung Dashboard nach Schritt 3](<Bilder/Bildschirmfoto 2026-11-25 um 21.26.36.png>)
+
+*Bild 12: WAVE auf dem Dashboard nach Schritt 2 und 3. Keine Fehler, keine Kontrast-Fehler, AIM Score 10 von 10.*
+
+![Dashboard mit WAVE-Markierungen nach Schritt 3](<Bilder/Bildschirmfoto 2026-11-25 um 21.26.42.png>)
+
+*Bild 13: Das Dashboard mit den WAVE-Markierungen. Es gibt keine roten Kontrast-Symbole und keine „Tr“-Symbole für kleine Schrift mehr.*
+
+![WAVE auf der Kontakt-Seite nach Schritt 3](<Bilder/Bildschirmfoto 2026-11-25 um 21.27.10.png>)
+
+*Bild 14: WAVE auf der Kontakt-Seite nach Schritt 2 und 3. Die Kontrast-Fehler sind weg. Die Fehler bei den Formular-Beschriftungen sind noch da.*
+
+| Was WAVE zählt | Dashboard vorher | Dashboard nachher | Kontakt vorher | Kontakt nachher |
+|----------------|-----------------:|------------------:|---------------:|----------------:|
+| Fehler | 0 | 0 | 4 | 4 |
+| Kontrast-Fehler | 8 | **0** | 3 | **0** |
+| Warnungen | 9 | **2** | 9 | **7** |
+| AIM Score | 6,5 (65 %) | **10 (100 %)** | 6,2 (62 %) | **7,4 (74 %)** |
+
+**Was das bedeutet:**
+
+- **Alle Kontrast-Fehler sind behoben**, auf dem Dashboard (8 → 0) und auf der Kontakt-Seite (3 → 0). Das ist der Erfolg von Schritt 2.
+- **Alle Warnungen „sehr kleine Schrift“ sind weg**: Auf dem Dashboard fallen 7 Warnungen weg, auf der Kontakt-Seite 2. Das ist der Erfolg von Schritt 3.
+- Das **Dashboard** erreicht schon **10 von 10**, also mehr als die geforderten 90 %.
+- Übrig sind auf dem Dashboard 2 Warnungen: **keine Überschriften-Struktur** (Problem 3) und das **`<noscript>`-Element** (Problem 4).
+- Die **Kontakt-Seite** liegt bei **7,4 von 10**. Hier fehlen noch die Verbindungen zwischen Beschriftung und Feld (4 Fehler „Missing form label“, 4 × „Orphaned form label“, 1 × „Select missing label“). Das ist der nächste wichtige Schritt.
+
+---
+
+### Schritt 4: …
 
 **Datum:**
 **Was war das Problem?**
@@ -307,8 +391,11 @@ Weil fast alle Farben als CSS-Variablen in `styles.css` stehen, reicht eine Änd
 
 ## 5. Endergebnis
 
-| | Vorher | Nachher |
-|---|---|---|
-| Kontrast-Fehler | 8 | |
-| Warnungen | 9 | |
-| AIM Score | 6,5 / 10 (65 %) | |
+**Zwischenstand nach Schritt 3 (25.11.2026):**
+
+| | Dashboard vorher | Dashboard jetzt | Kontakt vorher | Kontakt jetzt |
+|---|---:|---:|---:|---:|
+| Fehler | 0 | 0 | 4 | 4 |
+| Kontrast-Fehler | 8 | 0 | 3 | 0 |
+| Warnungen | 9 | 2 | 9 | 7 |
+| AIM Score | 6,5 / 10 (65 %) | 10 / 10 (100 %) | 6,2 / 10 (62 %) | 7,4 / 10 (74 %) |

@@ -11,11 +11,11 @@ import { NotificationService } from '../../services/notification.service';
   imports: [CommonModule, DecimalPipe, FormsModule, LayoutComponent],
   styles: [`
     .kopf { margin-bottom: 22px; }
-    .titel { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
-    .unter { font-size: 13px; color: var(--text-gedimmt); }
+    .titel { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+    .unter { font-size: 0.8125rem; color: var(--text-gedimmt); }
     .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .karte { background: var(--karte); border: 1px solid var(--rand); border-radius: var(--ecke); overflow: hidden; margin-bottom: 16px; }
-    .karte-kopf { padding: 14px 18px; border-bottom: 1px solid var(--rand); font-size: 14px; font-weight: 600; }
+    .karte-kopf { padding: 14px 18px; border-bottom: 1px solid var(--rand); font-size: 0.875rem; font-weight: 600; }
     .form { padding: 18px; }
     .alarm-eintrag {
       display: flex; align-items: center; gap: 12px;
@@ -23,10 +23,10 @@ import { NotificationService } from '../../services/notification.service';
     }
     .alarm-eintrag:hover { background: rgba(255,255,255,0.02); }
     .alarm-eintrag:last-child { border-bottom: none; }
-    .alarm-symbol { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 500; text-transform: uppercase; }
-    .alarm-detail { flex: 1; font-size: 12.5px; color: var(--text-gedimmt); }
+    .alarm-symbol { font-family: 'JetBrains Mono', monospace; font-size: 0.7812rem; font-weight: 500; text-transform: uppercase; }
+    .alarm-detail { flex: 1; font-size: 0.7812rem; color: var(--text-gedimmt); }
     .status-badge {
-      font-size: 10px; padding: 2px 7px; border-radius: 20px; font-weight: 600; letter-spacing: 0.04em;
+      font-size: 0.75rem; padding: 2px 7px; border-radius: 20px; font-weight: 600; letter-spacing: 0.04em;
     }
     .status-badge.active    { background: var(--gruen-schwach); color: var(--gruen); }
     .status-badge.triggered { background: var(--akzent-schwach); color: var(--akzent-hell); }
@@ -69,7 +69,7 @@ import { NotificationService } from '../../services/notification.service';
         <!-- Info-Box -->
         <div class="karte">
           <div class="karte-kopf">ℹ️ So funktionieren Alarme</div>
-          <div class="form" style="color: var(--text-gedimmt); font-size: 13px; line-height: 1.7">
+          <div class="form" style="color: var(--text-gedimmt); font-size: 0.8125rem; line-height: 1.7">
             <p style="margin-bottom: 12px">Alarme werden automatisch geprüft wenn neue Preisdaten eintreffen (alle ~60 Sekunden von CoinGecko).</p>
             <p style="margin-bottom: 12px">Du bekommst eine <strong style="color: var(--text)">Echtzeit-Benachrichtigung</strong> sobald ein Alarm ausgelöst wurde – ohne die Seite neu laden zu müssen.</p>
             <p>Ausgelöste Alarme kannst du zurücksetzen um sie erneut zu überwachen.</p>
